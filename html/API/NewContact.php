@@ -23,11 +23,18 @@
 	else
 	{
 		$stmt = $conn->prepare("INSERT into Contacts (UserId, FirstName, LastName, PhoneNumber, EmailAddress) VALUES(?,?,?,?,?)");
-		$stmt->bind_param("issss", $UserId, $Firstname, $LastName, $PhoneNumber, $EmailAddress);
-		$stmt->execute();
-		$stmt->close();
-		$conn->close();
-		returnWithError("");
+		$stmt->bind_param("issss", $userId, $firstName, $lastName, $phoneNumber, $emailAddress);
+
+		if ($stmt->execute()) {
+			$stmt->close();
+			$conn->close();
+			returnWithError("");
+		} else {
+			$error = $stmt->error;
+			$stmt->close();
+			$conn->close();
+			returnWithError($error);
+		}
 	}
 
 	function getRequestInfo()
