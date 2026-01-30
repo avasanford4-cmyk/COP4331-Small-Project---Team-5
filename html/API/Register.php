@@ -1,5 +1,10 @@
 <?php
 
+    header('Content-Type: application/json');
+    echo '{"debug":"REGISTER v2 HIT"}';
+    exit();
+
+
     $inData = getRequestInfo();
 
     $firstName = $inData["firstName"] ?? "";
