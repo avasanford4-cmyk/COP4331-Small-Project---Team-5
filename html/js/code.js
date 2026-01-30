@@ -1,4 +1,4 @@
-const urlBase = 'http://COP4331-5.com/API';
+const urlBase = 'http://142.93.67.135/API';
 const extension = 'php';
 
 let userId = 0;
@@ -13,12 +13,14 @@ function doLogin()
 	
 	let login = document.getElementById("loginName").value;
 	let password = document.getElementById("loginPassword").value;
-//	var hash = md5( password );
+	var hash = md5( password );
 	
 	document.getElementById("loginResult").innerHTML = "";
 
-	let tmp = {login:login,password:password};
-//	var tmp = {login:login,password:hash};
+//	let tmp = {login:login,password:password};
+	
+	// switch to using hashed password
+	var tmp = {login:login,password:hash};
 	let jsonPayload = JSON.stringify( tmp );
 	
 	let url = urlBase + '/Login.' + extension;
@@ -46,7 +48,8 @@ function doLogin()
 
 				saveCookie();
 	
-				window.location.href = "color.html";
+	//			window.location.href = "color.html";
+				window.location.href = "landing.html";
 			}
 		};
 		xhr.send(jsonPayload);
@@ -108,15 +111,18 @@ function doLogout()
 	window.location.href = "index.html";
 }
 
-function addColor()
+function newContact()
 {
-	let newColor = document.getElementById("colorText").value;
-	document.getElementById("colorAddResult").innerHTML = "";
+	let firstName = document.getElementById("contactFirstName").value;
+	let lastName = document.getElementById("contactLastName").value;
+	let email = document.getElementById("contactEmail").value;
+	let phone = document.getElementById("contactPhone").value;
+	document.getElementById("contactAddResult").innerHTML = "";
 
-	let tmp = {color:newColor,userId,userId};
+	let tmp = {FirstName:firstName,LastName:lastName,UserId:userId,EmailAddress:email,PhoneNumber:phone};
 	let jsonPayload = JSON.stringify( tmp );
 
-	let url = urlBase + '/AddColor.' + extension;
+	let url = urlBase + '/NewContact.' + extension;
 	
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
@@ -127,29 +133,29 @@ function addColor()
 		{
 			if (this.readyState == 4 && this.status == 200) 
 			{
-				document.getElementById("colorAddResult").innerHTML = "Color has been added";
+				document.getElementById("contactAddResult").innerHTML = "Contact has been added";
 			}
 		};
 		xhr.send(jsonPayload);
 	}
 	catch(err)
 	{
-		document.getElementById("colorAddResult").innerHTML = err.message;
+		document.getElementById("contactAddResult").innerHTML = err.message;
 	}
 	
 }
 
-function searchColor()
+function searchContact()
 {
 	let srch = document.getElementById("searchText").value;
-	document.getElementById("colorSearchResult").innerHTML = "";
+	document.getElementById("contactSearchResult").innerHTML = "";
 	
-	let colorList = "";
+	let contactList = "";
 
 	let tmp = {search:srch,userId:userId};
 	let jsonPayload = JSON.stringify( tmp );
 
-	let url = urlBase + '/SearchColors.' + extension;
+	let url = urlBase + '/SearchContacts.' + extension;
 	
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
@@ -160,26 +166,125 @@ function searchColor()
 		{
 			if (this.readyState == 4 && this.status == 200) 
 			{
-				document.getElementById("colorSearchResult").innerHTML = "Color(s) has been retrieved";
+				document.getElementById("contactSearchResult").innerHTML = "Contact(s) has been retrieved";
 				let jsonObject = JSON.parse( xhr.responseText );
-				
+
 				for( let i=0; i<jsonObject.results.length; i++ )
 				{
-					colorList += jsonObject.results[i];
+					let c = jsonObject.results[i];
+					contactList += c.firstName + " " + c.lastName + " - " + c.email + " - " + c.phone;
 					if( i < jsonObject.results.length - 1 )
 					{
-						colorList += "<br />\r\n";
+						contactList += "<br />\r\n";
 					}
 				}
-				
-				document.getElementsByTagName("p")[0].innerHTML = colorList;
+
+				document.getElementById("contactSearchResult").innerHTML = contactList;
 			}
 		};
 		xhr.send(jsonPayload);
 	}
 	catch(err)
 	{
-		document.getElementById("colorSearchResult").innerHTML = err.message;
+		document.getElementById("contactSearchResult").innerHTML = err.message;
 	}
 	
+}
+
+function loadContacts() {
+	let contactList = "";
+	let tmp = {search: "", userId: userId};
+	let jsonPayload = JSON.stringify( tmp );
+	let url = urlBase + '/SearchContacts.' + extension;
+	
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+	try {
+		xhr.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				let jsonObject = JSON.parse(xhr.responseText);
+				for (let i = 0; i < jsonObject.results.length; i++) {
+					let c = jsonObject.results[i];
+					contactList += c.firstName + " " + c.lastName + " - " + c.email + " - " + c.phone;
+					if (i < jsonObject.results.length - 1) {
+						contactList += "<br />\r\n";
+					}
+				}
+				document.getElementById("contactList").innerHTML = contactList;
+			}
+		};
+		xhr.send(jsonPayload);
+	}
+	catch(err)
+	{
+		document.getElementById("contactList").innerHTML = err.message;
+	}
+	
+}
+
+function editContact()
+{
+	let contactId = document.getElementById("editContactId").value;
+	let firstName = document.getElementById("editFirstName").value;
+	let lastName = document.getElementById("editLastName").value;
+	let email = document.getElementById("editEmail").value;
+	let phone = document.getElementById("editPhone").value;
+	document.getElementById("contactEditResult").innerHTML = "";
+
+	let tmp = {id:contactId,userId:userId,firstName:firstName,lastName:lastName,email:email,phone:phone};
+	let jsonPayload = JSON.stringify( tmp );
+
+	let url = urlBase + '/EditContact.' + extension;
+
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+	try
+	{
+		xhr.onreadystatechange = function()
+		{
+			if (this.readyState == 4 && this.status == 200)
+			{
+				document.getElementById("contactEditResult").innerHTML = "Contact has been updated";
+			}
+		};
+		xhr.send(jsonPayload);
+	}
+	catch(err)
+	{
+		document.getElementById("contactEditResult").innerHTML = err.message;
+	}
+
+}
+
+function deleteContact()
+{
+	let contactId = document.getElementById("deleteContactId").value;
+	document.getElementById("contactDeleteResult").innerHTML = "";
+
+	let tmp = {id:contactId,userId:userId};
+	let jsonPayload = JSON.stringify( tmp );
+
+	let url = urlBase + '/DeleteContact.' + extension;
+
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+	try
+	{
+		xhr.onreadystatechange = function()
+		{
+			if (this.readyState == 4 && this.status == 200)
+			{
+				document.getElementById("contactDeleteResult").innerHTML = "Contact has been deleted";
+			}
+		};
+		xhr.send(jsonPayload);
+	}
+	catch(err)
+	{
+		document.getElementById("contactDeleteResult").innerHTML = err.message;
+	}
+
 }
