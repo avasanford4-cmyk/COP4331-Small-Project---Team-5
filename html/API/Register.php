@@ -1,91 +1,67 @@
 <?php
 
-    $inData = getRequestInfo();
+	$inData = getRequestInfo();
 
-    $firstName = $inData["firstName"] ?? "";
-    $lastName  = $inData["lastName"] ?? "";
-    $login     = $inData["login"] ?? "";
-    $password  = $inData["password"] ?? "";
+	$firstName = $inData["firstName"];
+	$lastName = $inData["lastName"];
+	$login = $inData["login"];
+	$password = $inData["password"];
 
-    if($firstName == "" || $lastName == "" || $login == "" || $password == "")
-    {
-        returnWithError("Missing required fields");
-        exit();
-    }
+	$conn = new mysqli("localhost", "TheBeast", "WeLoveCOP4331", "COP4331");
+	if ($conn->connect_error)
+	{
+		returnWithError($conn->connect_error);
+	}
+	else
+	{
+		$stmt = $conn->prepare("SELECT ID FROM Users WHERE Login=?");
+		$stmt->bind_param("s", $login);
+		$stmt->execute();
+		$result = $stmt->get_result();
 
-    $conn = new mysqli("localhost", "TheBeast", "WeLoveCOP4331", "COP4331");
-    if($conn->connect_error)
-    {
-        returnWithError($conn->connect_error);
-        exit();
-    }
-    
-    $stmt = $conn->prepare("SELECT ID FROM Users WHERE Login=?");
-    if($stmt === false)
-    {
-        returnWithError("Prepare failed (check user): " . $conn->error);
-        $conn->close();
-        exit();
-    }
+		if ($result->fetch_assoc())
+		{
+			returnWithError("User already exists");
+			$stmt->close();
+			$conn->close();
+			return;
+		}
+		$stmt->close();
 
-    $stmt->bind_param("s", $login);
-    $stmt->execute();
-    $result = $stmt->get_result();
+        
+		$stmt = $conn->prepare("INSERT INTO Users (firstName, lastName, Login, Password) VALUES (?, ?, ?, ?)");
+		$stmt->bind_param("ssss", $firstName, $lastName, $login, $password);
+		$stmt->execute();
 
-    if($result && $result->fetch_assoc())
-    {
-        $stmt->close();
-        $conn->close();
-        returnWithError("User already exists");
-        exit();        
-    }
-    $stmt->close();
+		$id = $conn->insert_id;
 
-    $stmt = $conn->prepare("INSERT INTO Users (firstName, lastName, Login, Password) VALUES (?,?,?,?)");
-    if($stmt === false)
-    {
-        returnWithError("Prepare failed (insert): " . $conn->error);
-        $conn->close();
-        exit();
-    }
+		$stmt->close();
+		$conn->close();
 
-    $stmt->bind_param("ssss", $firstName, $lastName, $login, $password);
+		returnWithInfo($firstName, $lastName, $id);
+	}
 
-    if($stmt->execute())
-    {
-        $newId = $stmt->insert_id;
-        returnWithInfo($firstName, $lastName, $newId);
-    }
-    else
-    {
-        returnWithError("Failed to register user" . $stmt->error);
-    }
-    
-    $stmt->close();
-    $conn->close();
-    
+	function getRequestInfo()
+	{
+		return json_decode(file_get_contents('php://input'), true);
+	}
 
-    function getRequestInfo()
-    {
-        return json_decode(file_get_contents('php://input'), true);
-    }
+	function sendResultInfoAsJson( $obj )
+	{
+		header('Content-type: application/json');
+		echo $obj;
+	}
 
-    function sendResultInfoAsJson($obj)
-    {
-        header('Content-type: application/json');
-        echo $obj;
-    }
+	function returnWithError($err)
+	{
+		$retValue = '{"id":0,"firstName":"","lastName":"","error":"' . $err . '"}';
+		sendResultInfoAsJson($retValue);
+	}
 
-    function returnWithError( $err )
-    {
-        $retValue = '{"id":0,"firstName":"","lastName":"","error":"' . $err . '"}';
-        sendResultInfoAsJson( $retValue );
-    }
-
-    function returnWithInfo( $firstName, $lastName, $id )
-    {
-        $retValue = '{"id":' . $id . ',"firstName":"' . $firstName . '","lastName":"' . $lastName . '","error":""}';
-        sendResultInfoAsJson( $retValue );
-    }
+	function returnWithInfo($firstName, $lastName, $id)
+	{
+		$retValue = '{"id":' . $id . ',"firstName":"' . $firstName . '","lastName":"' . $lastName . '","error":""}';
+		sendResultInfoAsJson($retValue);
+	}
 
 ?>
