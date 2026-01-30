@@ -1,10 +1,5 @@
 <?php
 
-    header('Content-Type: application/json');
-    echo '{"debug":"REGISTER v2 HIT"}';
-    exit();
-
-
     $inData = getRequestInfo();
 
     $firstName = $inData["firstName"] ?? "";
@@ -22,38 +17,53 @@
     if($conn->connect_error)
     {
         returnWithError($conn->connect_error);
+        exit();
+    }
+    
+    $stmt = $conn->prepare("SELECT ID FROM Users WHERE Login=?");
+    if($stmt === false)
+    {
+        returnWithError("Prepare failed (check user): " . $conn->error);
+        $conn->close();
+        exit();
+    }
+
+    $stmt->bind_param("s", $login);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if($result && $result->fetch_assoc())
+    {
+        $stmt->close();
+        $conn->close();
+        returnWithError("User already exists");
+        exit();        
+    }
+    $stmt->close();
+
+    $stmt = $conn->prepare("INSERT INTO Users (firstName, lastName, Login, Password) VALUES (?,?,?,?)");
+    if($stmt === false)
+    {
+        returnWithError("Prepare failed (insert): " . $conn->error);
+        $conn->close();
+        exit();
+    }
+
+    $stmt->bind_param("ssss", $firstName, $lastName, $login, $password);
+
+    if($stmt->execute())
+    {
+        $newId = $stmt->insert_id;
+        returnWithInfo($firstName, $lastName, $newId);
     }
     else
     {
-        $stmt = $conn->prepare("SELECT ID FROM Users WHERE Login=?");
-        $stmt->bind_param("s", $login);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        if($result->fetch_assoc())
-        {
-            $stmt->close();
-            $conn->close();
-            returnWithError("User already exists");
-            exit();        
-        }
-        $stmt->close();
-
-        $stmt = $conn->prepare("INSERT INTO Users (firstName, lastName, Login, Password) VALUES (?,?,?,?)");
-        $stmt->bind_param("ssss", $firstName, $lastName, $login, $password);
-
-        if($stmt->execute())
-        {
-            $newId = $stmt->insert_id;
-            returnWithInfo($firstName, $lastName, $newId);
-        }
-        else
-        {
-            returnWithError("Failed to register user");
-        }
-        $stmt->close();
-        $conn->close();
+        returnWithError("Failed to register user" . $stmt->error);
     }
+    
+    $stmt->close();
+    $conn->close();
+    
 
     function getRequestInfo()
     {
