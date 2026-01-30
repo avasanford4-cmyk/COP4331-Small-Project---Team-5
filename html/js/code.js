@@ -5,6 +5,20 @@ let userId = 0;
 let firstName = "";
 let lastName = "";
 
+function validateEmail(email)
+{
+	var input = document.createElement('input');
+	input.type = 'email';
+	input.value = email;
+	return input.checkValidity();
+}
+
+function validatePhone(phone)
+{
+	const phoneRegex = /^\+?[\d\-\(\)]+$/;
+	return phoneRegex.test(phone);
+}
+
 function doLogin()
 {
 	userId = 0;
@@ -119,6 +133,17 @@ function newContact()
 	let phone = document.getElementById("contactPhone").value;
 	document.getElementById("contactAddResult").innerHTML = "";
 
+	if (!validateEmail(email))
+	{
+		document.getElementById("contactAddResult").innerHTML = "Invalid email address format";
+		return;
+	}
+	if (!validatePhone(phone))
+	{
+		document.getElementById("contactAddResult").innerHTML = "Invalid phone number format";
+		return;
+	}
+
 	let tmp = {FirstName:firstName,LastName:lastName,UserId:userId,EmailAddress:email,PhoneNumber:phone};
 	let jsonPayload = JSON.stringify( tmp );
 
@@ -231,6 +256,17 @@ function editContact()
 	let email = document.getElementById("editEmail").value;
 	let phone = document.getElementById("editPhone").value;
 	document.getElementById("contactEditResult").innerHTML = "";
+
+	if (!validateEmail(email))
+	{
+		document.getElementById("contactEditResult").innerHTML = "Invalid email address format";
+		return;
+	}
+	if (!validatePhone(phone))
+	{
+		document.getElementById("contactEditResult").innerHTML = "Invalid phone number format";
+		return;
+	}
 
 	let tmp = {id:contactId,userId:userId,firstName:firstName,lastName:lastName,email:email,phone:phone};
 	let jsonPayload = JSON.stringify( tmp );
