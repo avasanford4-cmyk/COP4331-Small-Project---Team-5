@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code.js Function Tester</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .section { border: 1px solid #ccc; margin: 10px 0; padding: 15px; }
+        .result { background-color: #f0f0f0; padding: 10px; margin: 10px 0; }
+        button { background-color: #007cba; color: white; padding: 8px 16px; border: none; cursor: pointer; margin: 5px; }
+        button:hover { background-color: #005a8b; }
+        input, select { margin: 5px; padding: 5px; }
+        h2 { color: #007cba; }
+    </style>
+</head>
+<body>
+    <h1>Code.js Function Tester</h1>
+    
+    <!-- Login Section -->
+    <div class="section">
+        <h2>Login Testing</h2>
+        <input type="text" id="loginName" placeholder="Username" value="testuser">
+        <input type="password" id="loginPassword" placeholder="Password" value="testpass">
+        <button onclick="doLogin()">Test Login</button>
+        <div id="loginResult" class="result"></div>
+    </div>
+
+    <!-- Contact Management Section -->
+    <div class="section">
+        <h2>Add Contact Testing</h2>
+        <input type="text" id="contactFirstName" placeholder="First Name" value="John">
+        <input type="text" id="contactLastName" placeholder="Last Name" value="Doe">
+        <input type="email" id="contactEmail" placeholder="Email" value="john.doe@example.com">
+        <input type="tel" id="contactPhone" placeholder="Phone" value="123-456-7890">
+        <button onclick="newContact()">Test Add Contact</button>
+        <div id="contactAddResult" class="result"></div>
+    </div>
+
+    <!-- Search Contacts Section -->
+    <div class="section">
+        <h2>Search Contacts Testing</h2>
+        <input type="text" id="searchText" placeholder="Search term" value="John">
+        <button onclick="searchContact()">Test Search</button>
+        <button onclick="loadContacts()">Test Load All Contacts</button>
+        <div id="contactSearchResult" class="result"></div>
+        <div id="contactList" class="result"></div>
+    </div>
+
+    <!-- Edit Contact Section -->
+    <div class="section">
+        <h2>Edit Contact Testing</h2>
+        <input type="text" id="editContactId" placeholder="Contact ID" value="1">
+        <input type="text" id="editFirstName" placeholder="First Name" value="Jane">
+        <input type="text" id="editLastName" placeholder="Last Name" value="Smith">
+        <input type="email" id="editEmail" placeholder="Email" value="jane.smith@example.com">
+        <input type="tel" id="editPhone" placeholder="Phone" value="098-765-4321">
+        <button onclick="editContact()">Test Edit Contact</button>
+        <div id="contactEditResult" class="result"></div>
+    </div>
+
+    <!-- Delete Contact Section -->
+    <div class="section">
+        <h2>Delete Contact Testing</h2>
+        <input type="text" id="deleteContactId" placeholder="Contact ID to Delete" value="1">
+        <button onclick="deleteContact()">Test Delete Contact</button>
+        <div id="contactDeleteResult" class="result"></div>
+    </div>
+
+    <!-- Validation Testing Section -->
+    <div class="section">
+        <h2>Validation Testing</h2>
+        <input type="text" id="testEmail" placeholder="Test Email" value="test@example.com">
+        <button onclick="testEmailValidation()">Test Email Validation</button>
+        <br>
+        <input type="text" id="testPhone" placeholder="Test Phone" value="123-456-7890">
+        <button onclick="testPhoneValidation()">Test Phone Validation</button>
+        <div id="validationResult" class="result"></div>
+    </div>
+
+    <!-- Cookie Testing Section -->
+    <div class="section">
+        <h2>Cookie Testing</h2>
+        <button onclick="testSaveCookie()">Test Save Cookie</button>
+        <button onclick="testReadCookie()">Test Read Cookie</button>
+        <button onclick="doLogout()">Test Logout</button>
+        <div id="cookieResult" class="result"></div>
+    </div>
+
+    <!-- Status Display -->
+    <div class="section">
+        <h2>Current Status</h2>
+        <div id="statusDisplay" class="result">
+            <p>User ID: <span id="currentUserId">Not set</span></p>
+            <p>First Name: <span id="currentFirstName">Not set</span></p>
+            <p>Last Name: <span id="currentLastName">Not set</span></p>
+        </div>
+        <button onclick="updateStatusDisplay()">Refresh Status</button>
+    </div>
+
+    <!-- Include md5 library (needed for password hashing) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
+    
+    <!-- Include your code.js file -->
+    <script src="js/code.js"></script>
+    
+    <!-- Additional test functions -->
+    <script>
+        function testEmailValidation() {
+            const email = document.getElementById('testEmail').value;
+            const isValid = validateEmail(email);
+            document.getElementById('validationResult').innerHTML = 
+                `Email "${email}" is ${isValid ? 'VALID' : 'INVALID'}`;
+        }
+
+        function testPhoneValidation() {
+            const phone = document.getElementById('testPhone').value;
+            const isValid = validatePhone(phone);
+            document.getElementById('validationResult').innerHTML = 
+                `Phone "${phone}" is ${isValid ? 'VALID' : 'INVALID'}`;
+        }
+
+        function testSaveCookie() {
+            // Set some test values
+            userId = 123;
+            firstName = "Test";
+            lastName = "User";
+            saveCookie();
+            document.getElementById('cookieResult').innerHTML = 
+                'Cookie saved with test data (userId=123, firstName=Test, lastName=User)';
+            updateStatusDisplay();
+        }
+
+        function testReadCookie() {
+            readCookie();
+            document.getElementById('cookieResult').innerHTML = 
+                'Cookie read - check status display below';
+            updateStatusDisplay();
+        }
+
+        function updateStatusDisplay() {
+            document.getElementById('currentUserId').textContent = userId || 'Not set';
+            document.getElementById('currentFirstName').textContent = firstName || 'Not set';
+            document.getElementById('currentLastName').textContent = lastName || 'Not set';
+        }
+
+        // Initialize status display on page load
+        window.onload = function() {
+            updateStatusDisplay();
+        }
+    </script>
+</body>
+</html>
