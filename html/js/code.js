@@ -1,4 +1,4 @@
-const urlBase = 'http://COP4331-5.com/API';
+const urlBase = 'http://142.93.67.135/API';
 const extension = 'php';
 
 let userId = 0;
@@ -99,6 +99,66 @@ function readCookie()
 	}
 }
 
+function doRegister()
+{
+	document.getElementById("registerResult").innerHTML = "";
+
+	let firstName = document.getElementById("registerFirstName").value;
+	let lastName = document.getElementById("registerLastName").value;
+	let login = document.getElementById("registerLogin").value;
+	let password = document.getElementById("registerPassword").value;
+
+	if (firstName.trim() === "" || lastName.trim() === "" || login.trim() === "" || password.trim() === "")
+	{
+		document.getElementById("registerResult").innerHTML = "Please fill in all fields";
+		return;
+	}
+
+	let tmp = {firstName:firstName, lastName:lastName, login:login, password:password};
+	let jsonPayload = JSON.stringify(tmp);
+
+	let url = urlBase + '/Register.' + extension;
+
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+	try
+	{
+		xhr.onreadystatechange = function()
+		{
+
+			if (this.readyState == 4 && this.status == 200)
+			{
+				let jsonObject = JSON.parse(xhr.responseText);
+
+				if(jsonObject.id <1)
+				{
+					document.getElementById("registerResult").innerHTML = jsonObject.error;
+					return;
+				}
+
+				userId = jsonObject.id;
+				window.firstName = jsonObject.firstName;
+				window.lastName = jsonObject.lastName;
+
+				firstName = jsonObject.firstName;
+				lastName = jsonObject.lastName;
+
+				saveCookie();
+
+				window.location.href = "color.html";
+			}
+		};
+		xhr.send(jsonPayload);
+	}
+
+	catch(err)
+	{
+		document.getElementById("registerResult").innerHTML = err.message;
+	}
+}
+
 function doLogout()
 {
 	userId = 0;
@@ -113,7 +173,7 @@ function addColor()
 	let newColor = document.getElementById("colorText").value;
 	document.getElementById("colorAddResult").innerHTML = "";
 
-	let tmp = {color:newColor,userId,userId};
+	let tmp = {color:newColor,userId:userId};
 	let jsonPayload = JSON.stringify( tmp );
 
 	let url = urlBase + '/AddColor.' + extension;
