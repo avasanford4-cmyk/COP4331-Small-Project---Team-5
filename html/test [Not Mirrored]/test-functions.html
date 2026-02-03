@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Function Tester</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .section { border: 1px solid #ccc; margin: 10px 0; padding: 15px; }
+        .result { background-color: #f0f0f0; padding: 10px; margin: 10px 0; white-space: pre-wrap; word-break: break-word; }
+        button { background-color: #007cba; color: white; padding: 8px 16px; border: none; cursor: pointer; margin: 5px; }
+        button:hover { background-color: #005a8b; }
+        input { margin: 5px; padding: 5px; }
+        h2 { color: #007cba; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>API Function Tester</h1>
+
+    <!-- Login Section -->
+    <div class="section">
+        <h2>Login</h2>
+        <input type="text" id="loginName" placeholder="Username">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button onclick="testLogin()">Test Login</button>
+        <div id="loginResult" class="result"></div>
+    </div>
+
+    <!-- Register Section -->
+    <div class="section">
+        <h2>Register</h2>
+        <input type="text" id="registerFirstName" placeholder="First Name">
+        <input type="text" id="registerLastName" placeholder="Last Name">
+        <input type="text" id="registerLogin" placeholder="Username">
+        <input type="password" id="registerPassword" placeholder="Password">
+        <button onclick="testRegister()">Test Register</button>
+        <div id="registerResult" class="result"></div>
+    </div>
+
+    <!-- Logout Section -->
+    <div class="section">
+        <h2>Logout</h2>
+        <button onclick="testLogout()">Test Logout</button>
+        <div id="logoutResult" class="result"></div>
+    </div>
+
+    <!-- Add Contact Section -->
+    <div class="section">
+        <h2>Add Contact</h2>
+        <input type="text" id="contactFirstName" placeholder="First Name">
+        <input type="text" id="contactLastName" placeholder="Last Name">
+        <input type="email" id="contactEmail" placeholder="Email">
+        <input type="tel" id="contactPhone" placeholder="Phone">
+        <button onclick="newContact()">Test Add Contact</button>
+        <div id="contactAddResult" class="result"></div>
+    </div>
+
+    <!-- Search Contacts Section -->
+    <div class="section">
+        <h2>Search Contacts</h2>
+        <input type="text" id="searchText" placeholder="Search term">
+        <button onclick="searchContact()">Test Search</button>
+        <div id="contactSearchResult" class="result"></div>
+    </div>
+
+    <!-- Edit Contact Section -->
+    <div class="section">
+        <h2>Edit Contact</h2>
+        <input type="text" id="editContactId" placeholder="Contact ID">
+        <input type="text" id="editFirstName" placeholder="First Name">
+        <input type="text" id="editLastName" placeholder="Last Name">
+        <input type="email" id="editEmail" placeholder="Email">
+        <input type="tel" id="editPhone" placeholder="Phone">
+        <button onclick="editContact()">Test Edit Contact</button>
+        <div id="contactEditResult" class="result"></div>
+    </div>
+
+    <!-- Delete Contact Section -->
+    <div class="section">
+        <h2>Delete Contact</h2>
+        <input type="text" id="deleteContactId" placeholder="Contact ID">
+        <button onclick="deleteContact()">Test Delete Contact</button>
+        <div id="contactDeleteResult" class="result"></div>
+    </div>
+
+    <!-- Cookie Testing Section -->
+    <div class="section">
+        <h2>Cookie Testing</h2>
+        <button onclick="testSaveCookie()">Test Save Cookie</button>
+        <button onclick="testReadCookie()">Test Read Cookie</button>
+        <div id="cookieResult" class="result"></div>
+    </div>
+
+    <!-- Status Display -->
+    <div class="section">
+        <h2>Current Status</h2>
+        <div id="statusDisplay" class="result">
+            <p>User ID: <span id="currentUserId">Not set</span></p>
+            <p>First Name: <span id="currentFirstName">Not set</span></p>
+            <p>Last Name: <span id="currentLastName">Not set</span></p>
+        </div>
+        <button onclick="updateStatusDisplay()">Refresh Status</button>
+    </div>
+
+    <!-- Include code.js for saveCookie/readCookie and global variables -->
+    <script src="../js/code.js"></script>
+
+    <script>
+        const apiBase = urlBase;
+        const ext = extension;
+
+        // --- Register (mirrors code.js doRegister without redirect) ---
+        function testRegister() {
+            let fName = document.getElementById("registerFirstName").value;
+            let lName = document.getElementById("registerLastName").value;
+            let login = document.getElementById("registerLogin").value;
+            let password = document.getElementById("registerPassword").value;
+
+            document.getElementById("registerResult").innerHTML = "";
+
+            if (fName.trim() === "" || lName.trim() === "" || login.trim() === "" || password.trim() === "") {
+                document.getElementById("registerResult").innerHTML =
+                    '<span class="error">Please fill in all fields</span>';
+                return;
+            }
+
+            let payload = JSON.stringify({firstName: fName, lastName: lName, login: login, password: password});
+            let url = apiBase + '/Register.' + ext;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+            try {
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let json = JSON.parse(xhr.responseText);
+                        userId = json.id;
+
+                        if (userId < 1) {
+                            document.getElementById("registerResult").innerHTML =
+                                '<span class="error">Registration failed: ' + (json.error || "Unknown error") + '</span>';
+                            updateStatusDisplay();
+                            return;
+                        }
+
+                        firstName = json.firstName;
+                        lastName = json.lastName;
+                        saveCookie();
+
+                        document.getElementById("registerResult").innerHTML =
+                            '<span class="success">Registration successful — id=' + userId + ', name=' + firstName + ' ' + lastName + '</span>';
+                        updateStatusDisplay();
+                    }
+                };
+                xhr.send(payload);
+            } catch(err) {
+                document.getElementById("registerResult").innerHTML = '<span class="error">' + err.message + '</span>';
+            }
+        }
+
+        // --- Login (overrides code.js doLogin to prevent redirect) ---
+        function testLogin() {
+            userId = 0;
+            firstName = "";
+            lastName = "";
+
+            let login = document.getElementById("loginName").value;
+            let password = document.getElementById("loginPassword").value;
+
+            document.getElementById("loginResult").innerHTML = "";
+
+            let payload = JSON.stringify({login: login, password: password});
+            let url = apiBase + '/Login.' + ext;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+            try {
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let json = JSON.parse(xhr.responseText);
+                        userId = json.id;
+
+                        if (userId < 1) {
+                            document.getElementById("loginResult").innerHTML =
+                                '<span class="error">Login failed: ' + (json.error || "User/Password combination incorrect") + '</span>';
+                            updateStatusDisplay();
+                            return;
+                        }
+
+                        firstName = json.firstName;
+                        lastName = json.lastName;
+                        saveCookie();
+
+                        document.getElementById("loginResult").innerHTML =
+                            '<span class="success">Login successful — id=' + userId + ', name=' + firstName + ' ' + lastName + '</span>';
+                        updateStatusDisplay();
+                    }
+                };
+                xhr.send(payload);
+            } catch(err) {
+                document.getElementById("loginResult").innerHTML = '<span class="error">' + err.message + '</span>';
+            }
+        }
+
+        // --- Logout (clears session without redirecting) ---
+        function testLogout() {
+            userId = 0;
+            firstName = "";
+            lastName = "";
+            document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+            document.getElementById("logoutResult").innerHTML = '<span class="success">Logged out — cookie cleared, session reset.</span>';
+            updateStatusDisplay();
+        }
+
+        // --- New Contact ---
+        function newContact() {
+            let fName = document.getElementById("contactFirstName").value;
+            let lName = document.getElementById("contactLastName").value;
+            let email = document.getElementById("contactEmail").value;
+            let phone = document.getElementById("contactPhone").value;
+
+            document.getElementById("contactAddResult").innerHTML = "";
+
+            let payload = JSON.stringify({
+                FirstName: fName,
+                LastName: lName,
+                UserId: userId,
+                EmailAddress: email,
+                PhoneNumber: phone
+            });
+            let url = apiBase + '/NewContact.' + ext;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+            try {
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let json = JSON.parse(xhr.responseText);
+                        if (json.error && json.error.length > 0) {
+                            document.getElementById("contactAddResult").innerHTML =
+                                '<span class="error">Error: ' + json.error + '</span>';
+                        } else {
+                            document.getElementById("contactAddResult").innerHTML =
+                                '<span class="success">Contact added successfully</span>';
+                        }
+                    }
+                };
+                xhr.send(payload);
+            } catch(err) {
+                document.getElementById("contactAddResult").innerHTML = '<span class="error">' + err.message + '</span>';
+            }
+        }
+
+        // --- Search Contacts ---
+        function searchContact() {
+            let srch = document.getElementById("searchText").value;
+            document.getElementById("contactSearchResult").innerHTML = "";
+
+            let payload = JSON.stringify({search: srch, userId: userId});
+            let url = apiBase + '/SearchContacts.' + ext;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+            try {
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let json = JSON.parse(xhr.responseText);
+                        if (json.error && json.error.length > 0) {
+                            document.getElementById("contactSearchResult").innerHTML =
+                                '<span class="error">Error: ' + json.error + '</span>';
+                            return;
+                        }
+
+                        let html = '<span class="success">Found ' + json.results.length + ' contact(s):</span><br>';
+                        for (let i = 0; i < json.results.length; i++) {
+                            let c = json.results[i];
+                            html += '[ID ' + c.id + '] ' + c.firstName + ' ' + c.lastName + ' | ' + c.email + ' | ' + c.phone + '<br>';
+                        }
+                        document.getElementById("contactSearchResult").innerHTML = html;
+                    }
+                };
+                xhr.send(payload);
+            } catch(err) {
+                document.getElementById("contactSearchResult").innerHTML = '<span class="error">' + err.message + '</span>';
+            }
+        }
+
+        // --- Edit Contact ---
+        function editContact() {
+            let contactId = parseInt(document.getElementById("editContactId").value);
+            let fName = document.getElementById("editFirstName").value;
+            let lName = document.getElementById("editLastName").value;
+            let email = document.getElementById("editEmail").value;
+            let phone = document.getElementById("editPhone").value;
+
+            document.getElementById("contactEditResult").innerHTML = "";
+
+            let payload = JSON.stringify({
+                id: contactId,
+                userId: userId,
+                firstName: fName,
+                lastName: lName,
+                email: email,
+                phone: phone
+            });
+            let url = apiBase + '/EditContact.' + ext;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+            try {
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let json = JSON.parse(xhr.responseText);
+                        if (json.error && json.error.length > 0) {
+                            document.getElementById("contactEditResult").innerHTML =
+                                '<span class="error">Error: ' + json.error + '</span>';
+                        } else {
+                            document.getElementById("contactEditResult").innerHTML =
+                                '<span class="success">Contact updated: ' + JSON.stringify(json) + '</span>';
+                        }
+                    }
+                };
+                xhr.send(payload);
+            } catch(err) {
+                document.getElementById("contactEditResult").innerHTML = '<span class="error">' + err.message + '</span>';
+            }
+        }
+
+        // --- Delete Contact ---
+        function deleteContact() {
+            let contactId = parseInt(document.getElementById("deleteContactId").value);
+            document.getElementById("contactDeleteResult").innerHTML = "";
+
+            let payload = JSON.stringify({id: contactId, userId: userId});
+            let url = apiBase + '/DeleteContact.' + ext;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+            try {
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let json = JSON.parse(xhr.responseText);
+                        if (json.error && json.error.length > 0) {
+                            document.getElementById("contactDeleteResult").innerHTML =
+                                '<span class="error">Error: ' + json.error + '</span>';
+                        } else {
+                            document.getElementById("contactDeleteResult").innerHTML =
+                                '<span class="success">Contact deleted: ' + JSON.stringify(json) + '</span>';
+                        }
+                    }
+                };
+                xhr.send(payload);
+            } catch(err) {
+                document.getElementById("contactDeleteResult").innerHTML = '<span class="error">' + err.message + '</span>';
+            }
+        }
+
+        // --- Cookie helpers ---
+        function testSaveCookie() {
+            if (userId < 1) {
+                document.getElementById('cookieResult').innerHTML =
+                    '<span class="error">No active session — log in first.</span>';
+                return;
+            }
+            saveCookie();
+            document.getElementById('cookieResult').innerHTML =
+                '<span class="success">Cookie saved (userId=' + userId + ', name=' + firstName + ' ' + lastName + ')</span>';
+        }
+
+        function testReadCookie() {
+            // Override readCookie redirect behavior for testing
+            let origUserId = userId;
+            let data = document.cookie;
+            let splits = data.split(",");
+            userId = -1;
+            for (let i = 0; i < splits.length; i++) {
+                let thisOne = splits[i].trim();
+                let tokens = thisOne.split("=");
+                if (tokens[0] == "firstName") firstName = tokens[1];
+                else if (tokens[0] == "lastName") lastName = tokens[1];
+                else if (tokens[0] == "userId") userId = parseInt(tokens[1].trim());
+            }
+
+            if (userId < 0) {
+                document.getElementById('cookieResult').innerHTML =
+                    '<span class="error">No valid cookie found.</span>';
+            } else {
+                document.getElementById('cookieResult').innerHTML =
+                    '<span class="success">Cookie read — userId=' + userId + ', name=' + firstName + ' ' + lastName + '</span>';
+            }
+            updateStatusDisplay();
+        }
+
+        // --- Status display ---
+        function updateStatusDisplay() {
+            document.getElementById('currentUserId').textContent = userId || 'Not set';
+            document.getElementById('currentFirstName').textContent = firstName || 'Not set';
+            document.getElementById('currentLastName').textContent = lastName || 'Not set';
+        }
+
+        window.onload = function() {
+            updateStatusDisplay();
+        }
+    </script>
+</body>
+</html>
