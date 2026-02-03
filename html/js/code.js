@@ -259,7 +259,44 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function doSignup() {
-    alert("Sign Up clicked!");
+    
+    let firstName = document.getElementById("signupFirstName").value;
+    let lastName = document.getElementById("signupLastName").value;
+    let login = document.getElementById("signupName").value;
+    let password = document.getElementById("signupPassword").value;
+
+    let tmp = { firstName, lastName, login, password };
+    let jsonPayload = JSON.stringify(tmp);
+
+    let url = 'http://COP4331-5.com/LAMPAPI/register.php';
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+    xhr.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                let jsonObject = JSON.parse(xhr.responseText);
+
+                if (jsonObject.error && jsonObject.error !== "") {
+                    
+                    document.getElementById("signupResult").innerHTML = jsonObject.error;
+                } else {
+                    
+                    document.getElementById("signupResult").innerHTML =
+                        "You have successfully signed up! You can log in now.";
+                    
+                    
+                    showLogin();
+                }
+            } else {
+                document.getElementById("signupResult").innerHTML = "Error connecting to server";
+            }
+        }
+    };
+
+    xhr.send(jsonPayload);
 }
 
 function showLogin() {
