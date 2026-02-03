@@ -156,29 +156,29 @@ select{
 
 
 #loginToggle {
-    position: fixed;      /* stays in the corner even if you scroll */
-    top: 20px;            /* distance from top */
-    right: 20px;          /* distance from right */
-    width: 200px;         /* make button bigger */
-    height: 50px;         /* taller button */
-    font-size: 24px;      /* bigger text */
-    border-radius: 25px;  /* round edges */
-    background-color: #dbad8a;  /* button color */
-    color: #fff;          /* text color */
+    position: fixed;     
+    top: 20px;            
+    right: 20px;         
+    width: 200px;         
+    height: 50px;      
+    font-size: 24px;      
+    border-radius: 25px;  
+    background-color: #dbad8a;  
+    color: #fff;         
     cursor: pointer;
-    z-index: 1000;        /* sits on top of other elements */
+    z-index: 1000;        
 }
 
 #loginToggle:hover {
-    background-color: #c18b6e; /* slightly darker on hover */
+    background-color: #c18b6e; 
 }
 
 
 /* Tabs container */
 #loginSignupTabs {
     display: flex;
-    justify-content: space-around; /* push Login and Sign Up to sides */
-    margin-bottom: 20px;           /* space below tabs */
+    justify-content: space-around; 
+    margin-bottom: 20px;           
 }
 
 /* Tab buttons */
@@ -194,17 +194,17 @@ select{
 }
 
 .tabButton.active {
-    border-bottom: 3px solid #805326; /* underline active tab */
+    border-bottom: 3px solid #805326; 
     font-weight: bold;
 }
 
 #signupForm input {
-    width: 85%;               /* make inputs wider */
-    padding: 10px;            /* more space inside for bigger size */
-    font-size: 15px;          /* bigger text */
-    margin: 1px 7.5%;        /* space between inputs, centered horizontally */
-    border-radius: 25px;      /* keeps the rounded edges */
-    text-align: center;       /* centers the text inside */
-    display: block;           /* ensures margin works correctly */
+    width: 85%;              
+    padding: 10px;          
+    font-size: 15px;         
+    margin: 1px 7.5%;     
+    border-radius: 25px;    
+    text-align: center;     
+    display: block;        
     font-family: 'Ubuntu', sans-serif;
 }
