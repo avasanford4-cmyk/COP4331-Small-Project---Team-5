@@ -1,25 +1,38 @@
 body 
 {
     background-color: #707070;
+    background-image: url("../images/beach.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 #title 
 {
-    font-size: 40px;
-    width: 100%;
+    font-size: 60px;
+    width: 80%;
     margin: 2% 5%;
     text-align: center;
-    font-family: 'Ubuntu', sans-serif;
-    color: #FFFFFF;
+    padding-left: 60px;
+    font-family: 'Pacifico', cursive;
+    color: #805326;
 }
 
-#loginDiv
-{
-    font-size: 30px;
-    width: 70%;
-    margin-left: 15%;
-    padding: 25px;
-    background-color: #b2b2b2;
+#loginDiv {                
+    position: fixed;                
+    top: 50%;                       
+    left: 50%;                      
+    transform: translate(-50%, -50%); 
+    width: 400px;    
+    height: 400px;               
+    padding: 50px 35px;                  
+    background-color: rgba(219, 173, 138, 0.8); 
+    backdrop-filter: blur(8px);     
+    border-radius: 20px;           
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3); 
+    z-index: 1001;
+    
 }
 
 #loggedInDiv
@@ -75,21 +88,23 @@ body
 input[type="text"],input[type="password"]{
     border-radius: 25px;
     text-align: center;
-    width: 80%;
-    margin-left: 10%;
-    margin-bottom: 2%;
+    width: 90%;
+    margin-left: 7%;
+    margin-bottom: 10%; 
     font-family: 'Ubuntu', sans-serif;
 }
 
 #inner-title{
     display: inline-block;
-    font-size: 0.8em;
+    font-size: 25px;
     width: 90%;
     text-align: center;
     margin-left: 5%;
-    margin-bottom: 2%;
+    margin-bottom: 7%;
+    margin-top: 2%; 
     font-family: 'Ubuntu', sans-serif;
-    color: #95060a;
+    color: #805326;
+    font-weight: bold;
 }
 
 #loginResult{
@@ -137,4 +152,59 @@ select{
     margin-bottom: 1%;
     font-family: 'Ubuntu', sans-serif;
     color: #95060a;
+}
+
+
+#loginToggle {
+    position: fixed;      /* stays in the corner even if you scroll */
+    top: 20px;            /* distance from top */
+    right: 20px;          /* distance from right */
+    width: 200px;         /* make button bigger */
+    height: 50px;         /* taller button */
+    font-size: 24px;      /* bigger text */
+    border-radius: 25px;  /* round edges */
+    background-color: #dbad8a;  /* button color */
+    color: #fff;          /* text color */
+    cursor: pointer;
+    z-index: 1000;        /* sits on top of other elements */
+}
+
+#loginToggle:hover {
+    background-color: #c18b6e; /* slightly darker on hover */
+}
+
+
+/* Tabs container */
+#loginSignupTabs {
+    display: flex;
+    justify-content: space-around; /* push Login and Sign Up to sides */
+    margin-bottom: 20px;           /* space below tabs */
+}
+
+/* Tab buttons */
+.tabButton {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    font-family: 'Ubuntu', sans-serif;
+    cursor: pointer;
+    padding: 10px 20px;
+    color: #805326;
+    transition: 0.3s;
+}
+
+.tabButton.active {
+    border-bottom: 3px solid #805326; /* underline active tab */
+    font-weight: bold;
+}
+
+#signupForm input {
+    width: 85%;               /* make inputs wider */
+    padding: 10px;            /* more space inside for bigger size */
+    font-size: 15px;          /* bigger text */
+    margin: 1px 7.5%;        /* space between inputs, centered horizontally */
+    border-radius: 25px;      /* keeps the rounded edges */
+    text-align: center;       /* centers the text inside */
+    display: block;           /* ensures margin works correctly */
+    font-family: 'Ubuntu', sans-serif;
 }

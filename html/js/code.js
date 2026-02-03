@@ -183,3 +183,34 @@ function searchColor()
 	}
 	
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const loginToggle = document.getElementById("loginToggle");
+    const loginDiv = document.getElementById("loginDiv");
+
+    loginToggle.addEventListener("click", () => {
+        if (loginDiv.style.display === "none" || loginDiv.style.display === "") {
+            loginDiv.style.display = "block"; // Show login form
+        } else {
+            loginDiv.style.display = "none"; // Hide login form
+        }
+    });
+});
+
+function doSignup() {
+    alert("Sign Up clicked!");
+}
+
+function showLogin() {
+    document.getElementById("loginForm").style.display = "block";
+    document.getElementById("signupForm").style.display = "none";
+    document.getElementById("loginTab").classList.add("active");
+    document.getElementById("signupTab").classList.remove("active");
+}
+
+function showSignup() {
+    document.getElementById("loginForm").style.display = "none";
+    document.getElementById("signupForm").style.display = "block";
+    document.getElementById("loginTab").classList.remove("active");
+    document.getElementById("signupTab").classList.add("active");
+}
