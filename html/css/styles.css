@@ -20,18 +20,19 @@ body
 }
 
 #loginDiv {                
-    position: fixed;                
-    top: 50%;                       
+    position: fixed;        
+    top: 55%;                       
     left: 50%;                      
     transform: translate(-50%, -50%); 
-    width: 400px;    
-    height: 400px;               
-    padding: 50px 35px;                  
+    width: 400px;                  
+    padding: 60px;                  
     background-color: rgba(219, 173, 138, 0.8); 
     backdrop-filter: blur(8px);     
     border-radius: 20px;           
     box-shadow: 0 4px 20px rgba(0,0,0,0.3); 
     z-index: 1001;
+    height: auto;
+    overflow: visible;
     
 }
 
@@ -109,13 +110,13 @@ input[type="text"],input[type="password"]{
 
 #loginResult{
     display: inline-block;
-    font-size: 0.8em;
+    font-size: 18px;
     width: 90%;
     text-align: center;
-    margin-left: 5%;
-    margin-bottom: 2%;
+    margin-right: 20px;
+    margin-bottom: 20px;;
     font-family: 'Ubuntu', sans-serif;
-    color: #95060a;
+    color: #80060ae9;
 }
 
 #userName{
@@ -151,7 +152,7 @@ select{
     margin-top: 2%;
     margin-bottom: 1%;
     font-family: 'Ubuntu', sans-serif;
-    color: #95060a;
+    color: #80060ae9;
 }
 
 
@@ -174,14 +175,14 @@ select{
 }
 
 
-/* Tabs container */
+
 #loginSignupTabs {
     display: flex;
     justify-content: space-around; 
     margin-bottom: 20px;           
 }
 
-/* Tab buttons */
+
 .tabButton {
     background: transparent;
     border: none;
@@ -206,5 +207,41 @@ select{
     border-radius: 25px;    
     text-align: center;     
     display: block;        
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.required {
+    display: inline-block;   
+    color: black;
+    font-weight: bold;
+    font-size: 20px;         
+    margin-left: 6px;
+    position: relative;
+    top: -30px;       
+}
+
+.rules {
+    font-weight: bold;
+    display: none;           
+    font-size: 18px;
+    color: #805326;           
+    margin-top: 15px;        
+}
+
+.rules ul {
+  list-style: none;  
+  padding-left: 0;    
+  margin: 0;          
+}
+
+.rules li {
+  margin-bottom: 6px; 
+}
+
+#registerResult{
+    font-size: 18px;
+    text-align: center;
+    color: #80060ae9;
+    margin-bottom: 20px;
     font-family: 'Ubuntu', sans-serif;
 }

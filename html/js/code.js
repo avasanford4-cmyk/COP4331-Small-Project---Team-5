@@ -114,6 +114,13 @@ function doRegister()
 		return;
 	}
 
+	let validationErrors = validateSignup(login, password);
+    if (validationErrors.length > 0) {
+        document.getElementById("registerResult").innerHTML = validationErrors.join("<br>");
+        return; 
+    }
+
+
 	var hash = md5( password );
 	let tmp = {firstName:firstName, lastName:lastName, login:login, password:hash};
 	let jsonPayload = JSON.stringify(tmp);
@@ -251,9 +258,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loginToggle.addEventListener("click", () => {
         if (loginDiv.style.display === "none" || loginDiv.style.display === "") {
-            loginDiv.style.display = "block"; // Show login form
+            loginDiv.style.display = "block"; 
         } else {
-            loginDiv.style.display = "none"; // Hide login form
+            loginDiv.style.display = "none"; 
         }
     });
 });
@@ -271,4 +278,67 @@ function showSignup() {
     document.getElementById("signupForm").style.display = "block";
     document.getElementById("loginTab").classList.remove("active");
     document.getElementById("signupTab").classList.add("active");
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const username = document.getElementById("registerLogin");
+    const password = document.getElementById("registerPassword");
+
+    const rulesBox = document.getElementById("signupRules");
+    const usernameRules = document.getElementById("usernameRules");
+    const passwordRules = document.getElementById("passwordRules");
+
+    if (!username || !password || !rulesBox) return;
+
+    function hideRulesIfOutside(e) {
+        if (e.relatedTarget === username || e.relatedTarget === password) {
+            return;
+        }
+        rulesBox.style.display = "none";
+    }
+
+    username.addEventListener("focus", function () {
+        rulesBox.style.display = "block";
+        usernameRules.style.display = "block";
+        passwordRules.style.display = "none";
+    });
+
+    password.addEventListener("focus", function () {
+        rulesBox.style.display = "block";
+        usernameRules.style.display = "none";
+        passwordRules.style.display = "block";
+    });
+
+    username.addEventListener("blur", hideRulesIfOutside);
+    password.addEventListener("blur", hideRulesIfOutside);
+
+});
+
+function validateSignup(username, password) {
+    let errors = [];
+
+    // Username rules
+    if (!/[a-zA-Z]/.test(username)) {
+        errors.push("Username must include at least one letter.");
+    }
+    if (username.length < 3 || username.length > 22) {
+        errors.push("Username must be 3–22 characters long.");
+    }
+
+    // Password rules
+    if (password.length < 8) {
+        errors.push("Password must be at least 8 characters.");
+    }
+    if (!/[a-zA-Z]/.test(password)) {
+        errors.push("Password must include at least one letter.");
+    }
+    if (!/\d/.test(password)) {
+        errors.push("Password must include at least one number.");
+    }
+    if (!/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password)) {
+        errors.push("Password must include at least one special character.");
+    }
+
+    return errors;
 }

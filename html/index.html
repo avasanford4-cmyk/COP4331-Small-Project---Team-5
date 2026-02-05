@@ -1,5 +1,6 @@
 <html>
 <head>
+	<meta charset="UTF-8">
 	<title>COP 4331 LAMP Stack Demo</title>
 	<script type="text/javascript" src="js/md5.js"></script>
 	<script type="text/javascript" src="js/code.js"></script>
@@ -14,7 +15,7 @@
 
 <div id="loginDiv">
 	<div id="loginSignupTabs">
-        <div id="loginTab" class="tabButton" onclick="showLogin()">Login</div>
+        <div id="loginTab" class="tabButton active" onclick="showLogin()">Login</div>
 		<div id="signupTab" class="tabButton" onclick="showSignup()">Sign Up</div>
     </div>
 
@@ -22,18 +23,35 @@
 		<span id="inner-title">PLEASE LOG IN</span>
 		<input type="text" id="loginName" placeholder="Username" /><br />
 		<input type="password" id="loginPassword" placeholder="Password"/><br />
+		<div id="loginResult"></div>
 		<button type="button" id="loginButton" class="buttons" onclick="doLogin();"> Login </button>
-		<span id="loginResult"></span>
 	</div>
 
 	<div id="signupForm" style="display:none;">
         <span id="inner-title">CREATE ACCOUNT</span>
-        <input type="text" id="registerFirstName" placeholder="First Name"/><br/>
-		<input type="text" id="registerLastName" placeholder="Last Name"/><br/>
-		<input type="text" id="registerLogin" placeholder="Username"/><br/>
-        <input type="password" id="registerPassword" placeholder="Password"/><br/>
+        <input type="text" id="registerFirstName" placeholder="First Name"/><span class="required">*</span><br/>
+		<input type="text" id="registerLastName" placeholder="Last Name"/><span class="required">*</span><br/>
+		<input type="text" id="registerLogin" placeholder="Username"/><span class="required">*</span><br/>
+        <input type="password" id="registerPassword" placeholder="Password"/><span class="required">*</span><br/>
+		<div id="registerResult"></div>
         <button type="button" id="signupButton" class="buttons" onclick="doRegister()">Sign Up</button>
-		<span id="registerResult"></span>
+
+		<div id="signupRules" class="rules" style="display:none;">
+    		<div id="usernameRules"><strong>Username must have:</strong> 
+			    <ul>
+					<li>🐚 At least one letter</li>
+      				<li>🐚 3–22 characters</li>
+    			</ul>
+			</div>
+    		<div id="passwordRules"><strong>Password must have:</strong>
+			    <ul>
+      				<li>🐚 At least 8 characters</li>
+      				<li>🐚 One letter</li>
+      				<li>🐚 One number</li>
+      				<li>🐚 One special character</li>
+    			</ul>
+			</div>
+		</div>
     </div>
 
 </div>
