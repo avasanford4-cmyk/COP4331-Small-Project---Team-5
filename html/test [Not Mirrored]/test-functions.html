@@ -39,6 +39,15 @@
         <div id="registerResult" class="result"></div>
     </div>
 
+    <!-- Validate Signup Section -->
+    <div class="section">
+        <h2>Validate Signup</h2>
+        <input type="text" id="valUsername" placeholder="Username">
+        <input type="text" id="valPassword" placeholder="Password">
+        <button onclick="testValidation()">Test Validation</button>
+        <div id="validationResult" class="result"></div>
+    </div>
+
     <!-- Logout Section -->
     <div class="section">
         <h2>Logout</h2>
@@ -104,7 +113,16 @@
         <button onclick="updateStatusDisplay()">Refresh Status</button>
     </div>
 
-    <!-- Include code.js for saveCookie/readCookie and global variables -->
+    <!-- Hidden DOM elements that code.js DOMContentLoaded listeners expect -->
+    <div id="loginToggle" style="display:none"></div>
+    <div id="loginDiv" style="display:none"></div>
+    <div id="loginForm" style="display:none"></div>
+    <div id="signupForm" style="display:none"></div>
+    <div id="loginTab" style="display:none"></div>
+    <div id="signupTab" style="display:none"></div>
+
+    <!-- Include md5 (required by code.js for password hashing) and code.js -->
+    <script src="../js/md5.js"></script>
     <script src="../js/code.js"></script>
 
     <script>
@@ -126,7 +144,15 @@
                 return;
             }
 
-            let payload = JSON.stringify({firstName: fName, lastName: lName, login: login, password: password});
+            let validationErrors = validateSignup(login, password);
+            if (validationErrors.length > 0) {
+                document.getElementById("registerResult").innerHTML =
+                    '<span class="error">' + validationErrors.join("<br>") + '</span>';
+                return;
+            }
+
+            let hash = md5(password);
+            let payload = JSON.stringify({firstName: fName, lastName: lName, login: login, password: hash});
             let url = apiBase + '/Register.' + ext;
 
             let xhr = new XMLHttpRequest();
@@ -171,7 +197,8 @@
 
             document.getElementById("loginResult").innerHTML = "";
 
-            let payload = JSON.stringify({login: login, password: password});
+            let hash = md5(password);
+            let payload = JSON.stringify({login: login, password: hash});
             let url = apiBase + '/Login.' + ext;
 
             let xhr = new XMLHttpRequest();
@@ -360,6 +387,17 @@
             } catch(err) {
                 document.getElementById("contactDeleteResult").innerHTML = '<span class="error">' + err.message + '</span>';
             }
+        }
+
+        // --- Validate Signup (calls code.js validateSignup directly) ---
+        function testValidation() {
+            let username = document.getElementById("valUsername").value;
+            let password = document.getElementById("valPassword").value;
+            let errors = validateSignup(username, password);
+            document.getElementById("validationResult").innerHTML =
+                errors.length === 0
+                    ? '<span class="success">All validations passed!</span>'
+                    : '<span class="error">' + errors.join("<br>") + '</span>';
         }
 
         // --- Cookie helpers ---
