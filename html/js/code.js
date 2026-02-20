@@ -116,7 +116,15 @@ function doRegister()
 
 	let validationErrors = validateSignup(login, password);
     if (validationErrors.length > 0) {
-        document.getElementById("registerResult").innerHTML = validationErrors.join("<br>");
+		const errorsDiv = document.getElementById("registerResult");
+
+		if (validationErrors.length === 1) {
+    		errorsDiv.style.textAlign = "center";
+    		errorsDiv.innerHTML = validationErrors[0];
+		} else {
+    		errorsDiv.style.textAlign = "left";
+    		errorsDiv.innerHTML = "<ul><li>" + validationErrors.join("</li><li>") + "</li></ul>";
+		}
         return; 
     }
 

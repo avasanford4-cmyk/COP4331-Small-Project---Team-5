@@ -16,25 +16,23 @@ body
     text-align: center;
     padding-left: 60px;
     font-family: 'Pacifico', cursive;
-    color: #805326;
+    text-shadow: 2px 2px 8px rgba(255, 255, 255, 1); 
+    color: #3B270C;
 }
 
-#loginDiv {                
-    position: fixed;        
-    top: 55%;                       
-    left: 50%;                      
-    transform: translate(-50%, -50%); 
-    width: 400px;                  
-    padding: 60px;                  
-    background-color: rgba(219, 173, 138, 0.8); 
+#loginDiv {     
+    position: relative;           
+    margin: 20px auto;
+    width: 350px;                  
+    padding: 30px;                  
+    background-color: rgba(217, 226, 240, 0.75); 
     backdrop-filter: blur(8px);     
     border-radius: 20px;           
     box-shadow: 0 4px 20px rgba(0,0,0,0.3); 
-    z-index: 1001;
-    height: auto;
-    overflow: visible;
+    z-index: 1001; 
     
 }
+
 
 #loggedInDiv
 {
@@ -104,13 +102,13 @@ input[type="text"],input[type="password"]{
     margin-bottom: 7%;
     margin-top: 2%; 
     font-family: 'Ubuntu', sans-serif;
-    color: #805326;
+    color: #3B270C;
     font-weight: bold;
 }
 
 #loginResult{
     display: inline-block;
-    font-size: 18px;
+    font-size: 14px;
     width: 90%;
     text-align: center;
     margin-right: 20px;
@@ -190,12 +188,12 @@ select{
     font-family: 'Ubuntu', sans-serif;
     cursor: pointer;
     padding: 10px 20px;
-    color: #805326;
+    color: #3B270C;
     transition: 0.3s;
 }
 
 .tabButton.active {
-    border-bottom: 3px solid #805326; 
+    border-bottom: 3px solid #3B270C; 
     font-weight: bold;
 }
 
@@ -223,8 +221,8 @@ select{
 .rules {
     font-weight: bold;
     display: none;           
-    font-size: 18px;
-    color: #805326;           
+    font-size: 16px;
+    color: #3B270C;           
     margin-top: 15px;        
 }
 
@@ -239,9 +237,18 @@ select{
 }
 
 #registerResult{
-    font-size: 18px;
+    font-size: 14px;
     text-align: center;
     color: #80060ae9;
     margin-bottom: 20px;
     font-family: 'Ubuntu', sans-serif;
+}
+
+#registerResult ul {
+    list-style-type: none;
+    padding-left: 20px; 
+}
+
+#registerResult ul li::before {
+    content: "🌊 ";  
 }
