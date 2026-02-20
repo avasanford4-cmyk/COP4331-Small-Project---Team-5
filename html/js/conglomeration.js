@@ -445,6 +445,8 @@ function validateSignup(username, password) {
 						+ '<td>Last Name</td>'
 						+ '<td>Email</td>'
 						+ '<td>Phone Number</td>'
+						// Adding delete button row
+						+ '<td>Delete Contact</td>' 
 						+ '</tr>';
                         for (let i = 0; i < json.results.length; i++) {
                             let c = json.results[i];
@@ -455,6 +457,9 @@ function validateSignup(username, password) {
 							+ '<td>' + c.lastName + '</td>' 
 							+ '<td>' + c.email + '</td>'
 							+ '<td>' + c.phone + '</td>'
+							// adding a delete function by adding a variable Button
+							// Because this primes each delete function with the variable's id, it is already linked
+							+ '<td>' + '<button type="button" class="deleteButton" onclick="deleteVariableContact(' + c.id + ');"> Delete Contact</button></td>'
 							+ '</tr>';
                         }
                         document.getElementById("contactSearchResult").innerHTML = html;
@@ -511,6 +516,35 @@ function validateSignup(username, password) {
         // --- Delete Contact ---
         function deleteContact() {
             let contactId = parseInt(document.getElementById("deleteContactId").value);
+            document.getElementById("contactDeleteResult").innerHTML = "";
+
+            let payload = JSON.stringify({id: contactId, userId: userId});
+            let url = urlBase + '/DeleteContact.' + extension;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+            try {
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let json = JSON.parse(xhr.responseText);
+                        if (json.error && json.error.length > 0) {
+                            document.getElementById("contactDeleteResult").innerHTML =
+                                '<span class="error">Error: ' + json.error + '</span>';
+                        } else {
+                            document.getElementById("contactDeleteResult").innerHTML =
+                                '<span class="success">Contact deleted: ' + JSON.stringify(json) + '</span>';
+                        }
+                    }
+                };
+                xhr.send(payload);
+            } catch(err) {
+                document.getElementById("contactDeleteResult").innerHTML = '<span class="error">' + err.message + '</span>';
+            }
+        }
+		
+		function deleteVariableContact(contactId) {
+            // let contactId = parseInt(document.getElementById("deleteContactId").value);
             document.getElementById("contactDeleteResult").innerHTML = "";
 
             let payload = JSON.stringify({id: contactId, userId: userId});
