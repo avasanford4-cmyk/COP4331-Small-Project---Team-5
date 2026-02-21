@@ -4,8 +4,8 @@
 
     $firstName = $inData["firstName"] ?? "";
     $lastName  = $inData["lastName"] ?? "";
-    $login     = $inData["firstName"] ?? "";
-    $password  = $inData["firstName"] ?? "";
+    $login     = $inData["login"] ?? "";
+    $password  = $inData["password"] ?? "";
 
     if($firstName == "" || $lastName == "" || $login == "" || $password == "")
     {
@@ -34,7 +34,7 @@
         }
         $stmt->close();
 
-        $stmt = $conn->prepare("INSERT INTO Users (firstName, lastName, Login, Password) VALUES (?,?,?,?");
+        $stmt = $conn->prepare("INSERT INTO Users (firstName, lastName, Login, Password) VALUES (?,?,?,?)");
         $stmt->bind_param("ssss", $firstName, $lastName, $login, $password);
 
         if($stmt->execute())
@@ -50,7 +50,7 @@
         $conn->close();
     }
 
-    function getResquestInfo()
+    function getRequestInfo()
     {
         return json_decode(file_get_contents('php://input'), true);
     }
