@@ -283,45 +283,6 @@ function validateSignup(username, password) {
     return errors;
 }
 
-        function newContact() {
-            let fName = document.getElementById("contactFirstName").value;
-            let lName = document.getElementById("contactLastName").value;
-            let email = document.getElementById("contactEmail").value;
-            let phone = document.getElementById("contactPhone").value;
-
-            document.getElementById("contactAddResult").innerHTML = "";
-
-            let payload = JSON.stringify({
-                FirstName: fName,
-                LastName: lName,
-                UserId: userId,
-                EmailAddress: email,
-                PhoneNumber: phone
-            });
-            let url = urlBase + '/NewContact.' + extension;
-
-            let xhr = new XMLHttpRequest();
-            xhr.open("POST", url, true);
-            xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-            try {
-                xhr.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                        let json = JSON.parse(xhr.responseText);
-                        if (json.error && json.error.length > 0) {
-                            document.getElementById("contactAddResult").innerHTML =
-                                '<span class="error">Error: ' + json.error + '</span>';
-                        } else {
-                            document.getElementById("contactAddResult").innerHTML =
-                                '<span class="success">Contact added successfully</span>';
-                        }
-                    }
-                };
-                xhr.send(payload);
-            } catch(err) {
-                document.getElementById("contactAddResult").innerHTML = '<span class="error">' + err.message + '</span>';
-            }
-        }
-
         // --- Search Contacts ---
         function searchContact() {
             let srch = document.getElementById("searchText").value;
@@ -377,34 +338,21 @@ function validateSignup(username, password) {
                             return;
                         }
 
-						// We set up the table column headers here.
-                        let html = '<span class="success">Found ' + json.results.length + ' contact(s):</span><br>' + '<table>'
-						+ '<tr>'
-						+ '<td>ID</td>'
-						+ '<td>First Name</td>'
-						+ '<td>Last Name</td>'
-						+ '<td>Email</td>'
-						+ '<td>Phone Number</td>'
-						// Adding delete button row
-						+ '<td>Delete/Edit Contact</td>' 
-						+ '</tr>';
+                        let html = '<span class="success">Found ' + json.results.length + ' contact(s):</span><br>'
+                            + '<table id="contactsTable">'
+                            + '<tr>'
+                            + '<td>ID</td>'
+                            + '<td>First Name</td>'
+                            + '<td>Last Name</td>'
+                            + '<td>Email</td>'
+                            + '<td>Phone Number</td>'
+                            + '<td>Actions</td>'
+                            + '</tr>';
                         for (let i = 0; i < json.results.length; i++) {
                             let c = json.results[i];
-                            // html += '[ID ' + c.id + '] ' + c.firstName + ' ' + c.lastName + ' | ' + c.email + ' | ' + c.phone + '<br>';
-							// We initialize each with an id relative to their current id so it can be referenced by the edit function
-							html += '<tr>'
-							+ '<td>' + c.id + '</td>' 
-							+ '<td>' + c.firstName + '</td>'
-							+ '<td>' + c.lastName + '</td>' 
-							+ '<td>' + c.email + '</td>'
-							+ '<td>' + c.phone + '</td>'
-							// adding a delete function by adding a variable Button
-							// Because this primes each delete function with the variable's id, it is already linked
-							+ '<td>' + '<button type="button" class="deleteButton" onclick="deleteVariableContact(' + c.id + ');"> Delete Contact</button>'
-							// now for adding the edit button in the same row
-							+ '/' + '<button type="button" class="editButton" onclick="editVariableContact(' + c.id + ');">Edit Contact</button></td>'
-							+ '</tr>';
+                            html += buildContactRow(c.id, c.firstName, c.lastName, c.email, c.phone);
                         }
+                        html += '</table>';
                         document.getElementById("contactSearchResult").innerHTML = html;
                     }
                 };
@@ -414,15 +362,46 @@ function validateSignup(username, password) {
             }
         }
 
-        // --- Edit Contact ---
-        function editContact() {
-            let contactId = parseInt(document.getElementById("editContactId").value);
-            let fName = document.getElementById("editFirstName").value;
-            let lName = document.getElementById("editLastName").value;
-            let email = document.getElementById("editEmail").value;
-            let phone = document.getElementById("editPhone").value;
+        function buildContactRow(id, firstName, lastName, email, phone) {
+            let safeName = (firstName + ' ' + lastName).replace(/'/g, "\\'");
+            return '<tr id="contact-row-' + id + '">'
+                + '<td>' + id + '</td>'
+                + '<td>' + firstName + '</td>'
+                + '<td>' + lastName + '</td>'
+                + '<td>' + email + '</td>'
+                + '<td>' + phone + '</td>'
+                + '<td>'
+                + '<button type="button" class="editButton" onclick="editVariableContact(' + id + ');" title="Edit">&#9998;</button> '
+                + '<button type="button" class="deleteButton" onclick="deleteVariableContact(' + id + ', \'' + safeName + '\');" title="Delete">&#128465;</button>'
+                + '</td>'
+                + '</tr>';
+        }
 
-            document.getElementById("contactEditResult").innerHTML = "";
+        function editVariableContact(contactId) {
+            let row = document.getElementById("contact-row-" + contactId);
+            if (!row) return;
+
+            let cells = row.getElementsByTagName("td");
+            let origFirst = cells[1].innerText;
+            let origLast = cells[2].innerText;
+            let origEmail = cells[3].innerText;
+            let origPhone = cells[4].innerText;
+
+            cells[1].innerHTML = '<input type="text" value="' + origFirst + '">';
+            cells[2].innerHTML = '<input type="text" value="' + origLast + '">';
+            cells[3].innerHTML = '<input type="text" value="' + origEmail + '">';
+            cells[4].innerHTML = '<input type="text" value="' + origPhone + '">';
+            cells[5].innerHTML = '<button type="button" onclick="saveEditContact(' + contactId + ');">Save</button> '
+                + '<button type="button" onclick="cancelEditContact(' + contactId + ', \'' + origFirst.replace(/'/g, "\\'") + '\', \'' + origLast.replace(/'/g, "\\'") + '\', \'' + origEmail.replace(/'/g, "\\'") + '\', \'' + origPhone.replace(/'/g, "\\'") + '\');">Cancel</button>';
+        }
+
+        function saveEditContact(contactId) {
+            let row = document.getElementById("contact-row-" + contactId);
+            let inputs = row.getElementsByTagName("input");
+            let fName = inputs[0].value;
+            let lName = inputs[1].value;
+            let email = inputs[2].value;
+            let phone = inputs[3].value;
 
             let payload = JSON.stringify({
                 id: contactId,
@@ -442,38 +421,65 @@ function validateSignup(username, password) {
                     if (this.readyState == 4 && this.status == 200) {
                         let json = JSON.parse(xhr.responseText);
                         if (json.error && json.error.length > 0) {
-                            document.getElementById("contactEditResult").innerHTML =
+                            document.getElementById("contactDeleteResult").innerHTML =
                                 '<span class="error">Error: ' + json.error + '</span>';
                         } else {
-                            document.getElementById("contactEditResult").innerHTML =
-                                '<span class="success">Contact updated: ' + JSON.stringify(json) + '</span>';
+                            row.outerHTML = buildContactRow(contactId, fName, lName, email, phone);
+                            document.getElementById("contactDeleteResult").innerHTML =
+                                '<span class="success">Contact updated successfully</span>';
                         }
                     }
                 };
                 xhr.send(payload);
             } catch(err) {
-                document.getElementById("contactEditResult").innerHTML = '<span class="error">' + err.message + '</span>';
+                document.getElementById("contactDeleteResult").innerHTML = '<span class="error">' + err.message + '</span>';
             }
         }
-		
-		function editVariableContact(initialId) {
-            let contactId = parseInt(document.getElementById("editContactId" + initialId.toString()).value);
-            let fName = document.getElementById("editFirstName" + initialId.toString()).value;
-            let lName = document.getElementById("editLastName" + initialId.toString()).value;
-            let email = document.getElementById("editEmail" + initialId.toString()).value;
-            let phone = document.getElementById("editPhone" + initialId.toString()).value;
 
-            document.getElementById("contactEditResult").innerHTML = "";
+        function cancelEditContact(contactId, origFirst, origLast, origEmail, origPhone) {
+            let row = document.getElementById("contact-row-" + contactId);
+            row.outerHTML = buildContactRow(contactId, origFirst, origLast, origEmail, origPhone);
+        }
+
+        function addContactRow() {
+            let table = document.getElementById("contactsTable");
+            if (!table) {
+                document.getElementById("contactSearchResult").innerHTML =
+                    '<table id="contactsTable">'
+                    + '<tr><td>ID</td><td>First Name</td><td>Last Name</td><td>Email</td><td>Phone Number</td><td>Actions</td></tr>'
+                    + '</table>';
+                table = document.getElementById("contactsTable");
+            }
+
+            let newRow = table.insertRow(-1);
+            newRow.id = "contact-row-new";
+            newRow.innerHTML = '<td>—</td>'
+                + '<td><input type="text" placeholder="First Name"></td>'
+                + '<td><input type="text" placeholder="Last Name"></td>'
+                + '<td><input type="text" placeholder="Email"></td>'
+                + '<td><input type="text" placeholder="Phone"></td>'
+                + '<td>'
+                + '<button type="button" onclick="saveNewContact();">Save</button> '
+                + '<button type="button" onclick="cancelNewContact();">Cancel</button>'
+                + '</td>';
+        }
+
+        function saveNewContact() {
+            let row = document.getElementById("contact-row-new");
+            let inputs = row.getElementsByTagName("input");
+            let fName = inputs[0].value;
+            let lName = inputs[1].value;
+            let email = inputs[2].value;
+            let phone = inputs[3].value;
 
             let payload = JSON.stringify({
-                id: contactId,
-                userId: userId,
-                firstName: fName,
-                lastName: lName,
-                email: email,
-                phone: phone
+                FirstName: fName,
+                LastName: lName,
+                UserId: userId,
+                EmailAddress: email,
+                PhoneNumber: phone
             });
-            let url = urlBase + '/EditContact.' + extension;
+            let url = urlBase + '/NewContact.' + extension;
 
             let xhr = new XMLHttpRequest();
             xhr.open("POST", url, true);
@@ -483,18 +489,25 @@ function validateSignup(username, password) {
                     if (this.readyState == 4 && this.status == 200) {
                         let json = JSON.parse(xhr.responseText);
                         if (json.error && json.error.length > 0) {
-                            document.getElementById("contactEditResult").innerHTML =
+                            document.getElementById("contactAddResult").innerHTML =
                                 '<span class="error">Error: ' + json.error + '</span>';
                         } else {
-                            document.getElementById("contactEditResult").innerHTML =
-                                '<span class="success">Contact updated: ' + JSON.stringify(json) + '</span>';
+                            let newId = json.id || 0;
+                            row.outerHTML = buildContactRow(newId, fName, lName, email, phone);
+                            document.getElementById("contactAddResult").innerHTML =
+                                '<span class="success">Contact added successfully</span>';
                         }
                     }
                 };
                 xhr.send(payload);
             } catch(err) {
-                document.getElementById("contactEditResult").innerHTML = '<span class="error">' + err.message + '</span>';
+                document.getElementById("contactAddResult").innerHTML = '<span class="error">' + err.message + '</span>';
             }
+        }
+
+        function cancelNewContact() {
+            let row = document.getElementById("contact-row-new");
+            if (row) row.remove();
         }
 
         // --- Delete Contact ---
@@ -527,8 +540,8 @@ function validateSignup(username, password) {
             }
         }
 		
-		function deleteVariableContact(contactId) {
-            // let contactId = parseInt(document.getElementById("deleteContactId").value);
+		function deleteVariableContact(contactId, fullName) {
+            if (!confirm('Are you sure you want to delete ' + fullName + '? This is permanent and cannot be undone.')) return;
             document.getElementById("contactDeleteResult").innerHTML = "";
 
             let payload = JSON.stringify({id: contactId, userId: userId});
