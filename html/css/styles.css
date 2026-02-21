@@ -6,6 +6,7 @@ body
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    min-height: 100vh;
 }
 
 #title 
@@ -164,7 +165,6 @@ select{
     border-radius: 25px;  
     background-color: #dbad8a;  
     color: #fff;         
-    cursor: pointer;
     z-index: 1000;        
 }
 
@@ -186,7 +186,6 @@ select{
     border: none;
     font-size: 20px;
     font-family: 'Ubuntu', sans-serif;
-    cursor: pointer;
     padding: 10px 20px;
     color: #3B270C;
     transition: 0.3s;
@@ -251,4 +250,33 @@ select{
 
 #registerResult ul li::before {
     content: "🌊 ";  
+}
+
+/* override browser default cursor for interactive elements */
+button,
+a,
+select,
+option,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+[role="button"],
+.buttons,
+.tabButton,
+* {
+  cursor: url("../images/conch-cursor.png") 4 2, auto;
+}
+
+/* leave I-beam inline cursor */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="search"],
+textarea,
+[contenteditable="true"] {
+  cursor: text !important;
+}
+
+button, a, [role="button"], input[type="submit"], input[type="button"] {
+  cursor: url("../images/conch-cursor.png") 4 2, pointer !important;
 }
