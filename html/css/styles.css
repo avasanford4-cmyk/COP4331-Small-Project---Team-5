@@ -34,6 +34,15 @@ body
     
 }
 
+.input-error {
+    border: 2px solid red;
+    background-color: #ffe5e5; /* light red shading */
+}
+
+.input-error + .required {
+    color: red;
+}
+
 
 #loggedInDiv
 {
@@ -83,6 +92,25 @@ body
 #colorText
 {
 	font-size: 30px;
+}
+
+
+.password-toggle {
+    position: absolute;
+    cursor: pointer;
+    user-select: none;
+    font-size: 1.2em;
+}
+
+/* Separate positions for login and signup */
+#loginTogglePassword {
+    top: 5px;   /* adjust vertically to line up with login password */
+    left: 87%;    /* or right: 15px; — whichever works for your layout */
+}
+
+#signupTogglePassword {
+    top: 7px;   /* adjust vertically to line up with signup password */
+    left: 83%;    /* or right: 15px; */
 }
 
 input[type="text"],input[type="password"]{
