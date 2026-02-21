@@ -1,7 +1,7 @@
 <html>
 <head>
 	<title>COP 4331 LAMP Stack Demo</title>
-	<script type="text/javascript" src="js/conglomeration.js"></script>
+	<script type="text/javascript" src="js/code.js"></script>
     <link href="css/styles.css" rel="stylesheet">	
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
 	
@@ -24,8 +24,23 @@
 
 <div id="accessUIDiv">
 	<br />
-	
+
 	<span id="contactDeleteResult"></span>
+	
+	
+	<h2>Edit Contact</h2>
+	<table>
+		<tr>
+			<td><input type="text" id="editContactId" placeholder="ID"></td>
+			<td><input type="text" id="editFirstName" placeholder="ID"></td>
+			<td><input type="text" id="editLastName" placeholder="ID"></td>
+			<td><input type="text" id="editEmail" placeholder="ID"></td>
+			<td><input type="text" id="editPhone" placeholder="ID"></td>
+			<td><button type="button" id="basicEditButton" onclick="editContact();">Submit Edits</button></td>
+		</tr>
+	</table>
+	<span id="contactEditResult"></span>
+	
 
 	<input type="text" id="searchText" placeholder="Color To Search For"/>
 	<button type="button" id="searchColorButton" class="buttons" onclick="modifiedSearchContact();"> Search Contacts </button><br />

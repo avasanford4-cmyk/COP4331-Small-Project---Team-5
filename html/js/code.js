@@ -342,3 +342,276 @@ function validateSignup(username, password) {
 
     return errors;
 }
+
+        function newContact() {
+            let fName = document.getElementById("contactFirstName").value;
+            let lName = document.getElementById("contactLastName").value;
+            let email = document.getElementById("contactEmail").value;
+            let phone = document.getElementById("contactPhone").value;
+
+            document.getElementById("contactAddResult").innerHTML = "";
+
+            let payload = JSON.stringify({
+                FirstName: fName,
+                LastName: lName,
+                UserId: userId,
+                EmailAddress: email,
+                PhoneNumber: phone
+            });
+            let url = urlBase + '/NewContact.' + extension;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+            try {
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let json = JSON.parse(xhr.responseText);
+                        if (json.error && json.error.length > 0) {
+                            document.getElementById("contactAddResult").innerHTML =
+                                '<span class="error">Error: ' + json.error + '</span>';
+                        } else {
+                            document.getElementById("contactAddResult").innerHTML =
+                                '<span class="success">Contact added successfully</span>';
+                        }
+                    }
+                };
+                xhr.send(payload);
+            } catch(err) {
+                document.getElementById("contactAddResult").innerHTML = '<span class="error">' + err.message + '</span>';
+            }
+        }
+
+        // --- Search Contacts ---
+        function searchContact() {
+            let srch = document.getElementById("searchText").value;
+            document.getElementById("contactSearchResult").innerHTML = "";
+
+            let payload = JSON.stringify({search: srch, userId: userId});
+            let url = urlBase + '/SearchContacts.' + extension;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+            try {
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let json = JSON.parse(xhr.responseText);
+                        if (json.error && json.error.length > 0) {
+                            document.getElementById("contactSearchResult").innerHTML =
+                                '<span class="error">Error: ' + json.error + '</span>';
+                            return;
+                        }
+
+                        let html = '<span class="success">Found ' + json.results.length + ' contact(s):</span><br>';
+                        for (let i = 0; i < json.results.length; i++) {
+                            let c = json.results[i];
+                            html += '[ID ' + c.id + '] ' + c.firstName + ' ' + c.lastName + ' | ' + c.email + ' | ' + c.phone + '<br>';
+                        }
+                        document.getElementById("contactSearchResult").innerHTML = html;
+                    }
+                };
+                xhr.send(payload);
+            } catch(err) {
+                document.getElementById("contactSearchResult").innerHTML = '<span class="error">' + err.message + '</span>';
+            }
+        }
+		
+		function modifiedSearchContact() {
+            let srch = document.getElementById("searchText").value;
+            document.getElementById("contactSearchResult").innerHTML = "";
+
+            let payload = JSON.stringify({search: srch, userId: userId});
+            let url = urlBase + '/SearchContacts.' + extension;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+            try {
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let json = JSON.parse(xhr.responseText);
+                        if (json.error && json.error.length > 0) {
+                            document.getElementById("contactSearchResult").innerHTML =
+                                '<span class="error">Error: ' + json.error + '</span>';
+                            return;
+                        }
+
+						// We set up the table column headers here.
+                        let html = '<span class="success">Found ' + json.results.length + ' contact(s):</span><br>' + '<table>'
+						+ '<tr>'
+						+ '<td>ID</td>'
+						+ '<td>First Name</td>'
+						+ '<td>Last Name</td>'
+						+ '<td>Email</td>'
+						+ '<td>Phone Number</td>'
+						// Adding delete button row
+						+ '<td>Delete/Edit Contact</td>' 
+						+ '</tr>';
+                        for (let i = 0; i < json.results.length; i++) {
+                            let c = json.results[i];
+                            // html += '[ID ' + c.id + '] ' + c.firstName + ' ' + c.lastName + ' | ' + c.email + ' | ' + c.phone + '<br>';
+							// We initialize each with an id relative to their current id so it can be referenced by the edit function
+							html += '<tr>'
+							+ '<td>' + c.id + '</td>' 
+							+ '<td>' + c.firstName + '</td>'
+							+ '<td>' + c.lastName + '</td>' 
+							+ '<td>' + c.email + '</td>'
+							+ '<td>' + c.phone + '</td>'
+							// adding a delete function by adding a variable Button
+							// Because this primes each delete function with the variable's id, it is already linked
+							+ '<td>' + '<button type="button" class="deleteButton" onclick="deleteVariableContact(' + c.id + ');"> Delete Contact</button>'
+							// now for adding the edit button in the same row
+							+ '/' + '<button type="button" class="editButton" onclick="editVariableContact(' + c.id + ');">Edit Contact</button></td>'
+							+ '</tr>';
+                        }
+                        document.getElementById("contactSearchResult").innerHTML = html;
+                    }
+                };
+                xhr.send(payload);
+            } catch(err) {
+                document.getElementById("contactSearchResult").innerHTML = '<span class="error">' + err.message + '</span>';
+            }
+        }
+
+        // --- Edit Contact ---
+        function editContact() {
+            let contactId = parseInt(document.getElementById("editContactId").value);
+            let fName = document.getElementById("editFirstName").value;
+            let lName = document.getElementById("editLastName").value;
+            let email = document.getElementById("editEmail").value;
+            let phone = document.getElementById("editPhone").value;
+
+            document.getElementById("contactEditResult").innerHTML = "";
+
+            let payload = JSON.stringify({
+                id: contactId,
+                userId: userId,
+                firstName: fName,
+                lastName: lName,
+                email: email,
+                phone: phone
+            });
+            let url = urlBase + '/EditContact.' + extension;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+            try {
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let json = JSON.parse(xhr.responseText);
+                        if (json.error && json.error.length > 0) {
+                            document.getElementById("contactEditResult").innerHTML =
+                                '<span class="error">Error: ' + json.error + '</span>';
+                        } else {
+                            document.getElementById("contactEditResult").innerHTML =
+                                '<span class="success">Contact updated: ' + JSON.stringify(json) + '</span>';
+                        }
+                    }
+                };
+                xhr.send(payload);
+            } catch(err) {
+                document.getElementById("contactEditResult").innerHTML = '<span class="error">' + err.message + '</span>';
+            }
+        }
+		
+		function editVariableContact(initialId) {
+            let contactId = parseInt(document.getElementById("editContactId" + initialId.toString()).value);
+            let fName = document.getElementById("editFirstName" + initialId.toString()).value;
+            let lName = document.getElementById("editLastName" + initialId.toString()).value;
+            let email = document.getElementById("editEmail" + initialId.toString()).value;
+            let phone = document.getElementById("editPhone" + initialId.toString()).value;
+
+            document.getElementById("contactEditResult").innerHTML = "";
+
+            let payload = JSON.stringify({
+                id: contactId,
+                userId: userId,
+                firstName: fName,
+                lastName: lName,
+                email: email,
+                phone: phone
+            });
+            let url = urlBase + '/EditContact.' + extension;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+            try {
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let json = JSON.parse(xhr.responseText);
+                        if (json.error && json.error.length > 0) {
+                            document.getElementById("contactEditResult").innerHTML =
+                                '<span class="error">Error: ' + json.error + '</span>';
+                        } else {
+                            document.getElementById("contactEditResult").innerHTML =
+                                '<span class="success">Contact updated: ' + JSON.stringify(json) + '</span>';
+                        }
+                    }
+                };
+                xhr.send(payload);
+            } catch(err) {
+                document.getElementById("contactEditResult").innerHTML = '<span class="error">' + err.message + '</span>';
+            }
+        }
+
+        // --- Delete Contact ---
+        function deleteContact() {
+            let contactId = parseInt(document.getElementById("deleteContactId").value);
+            document.getElementById("contactDeleteResult").innerHTML = "";
+
+            let payload = JSON.stringify({id: contactId, userId: userId});
+            let url = urlBase + '/DeleteContact.' + extension;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+            try {
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let json = JSON.parse(xhr.responseText);
+                        if (json.error && json.error.length > 0) {
+                            document.getElementById("contactDeleteResult").innerHTML =
+                                '<span class="error">Error: ' + json.error + '</span>';
+                        } else {
+                            document.getElementById("contactDeleteResult").innerHTML =
+                                '<span class="success">Contact deleted: ' + JSON.stringify(json) + '</span>';
+                        }
+                    }
+                };
+                xhr.send(payload);
+            } catch(err) {
+                document.getElementById("contactDeleteResult").innerHTML = '<span class="error">' + err.message + '</span>';
+            }
+        }
+		
+		function deleteVariableContact(contactId) {
+            // let contactId = parseInt(document.getElementById("deleteContactId").value);
+            document.getElementById("contactDeleteResult").innerHTML = "";
+
+            let payload = JSON.stringify({id: contactId, userId: userId});
+            let url = urlBase + '/DeleteContact.' + extension;
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+            try {
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        let json = JSON.parse(xhr.responseText);
+                        if (json.error && json.error.length > 0) {
+                            document.getElementById("contactDeleteResult").innerHTML =
+                                '<span class="error">Error: ' + json.error + '</span>';
+                        } else {
+                            document.getElementById("contactDeleteResult").innerHTML =
+                                '<span class="success">Contact deleted: ' + JSON.stringify(json) + '</span>';
+                        }
+                    }
+                };
+                xhr.send(payload);
+            } catch(err) {
+                document.getElementById("contactDeleteResult").innerHTML = '<span class="error">' + err.message + '</span>';
+            }
+        }
