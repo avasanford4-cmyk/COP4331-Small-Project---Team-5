@@ -1,0 +1,67 @@
+API Endpoint Tests for Postman
+==============================
+All endpoints use POST. Set Body > raw > JSON in Postman.
+Run in order. Replace <USER_ID> and <CONTACT_ID> with values from responses.
+
+
+=== 1. REGISTER ===
+POST http://142.93.67.135/API/Register.php
+
+{
+  "firstName":"Test",
+  "lastName":"User",
+  "login":"testuser",
+  "password":"Password1!"
+}
+
+
+=== 2. LOGIN ===
+POST http://142.93.67.135/API/Login.php
+
+{
+  "login":"testuser",
+  "password":"Password1!"
+}
+
+
+=== 3. NEW CONTACT ===
+POST http://142.93.67.135/API/NewContact.php
+
+{
+  "FirstName":"Jane",
+  "LastName":"Doe",
+  "UserId":<USER_ID>,
+  "EmailAddress":"jane@example.com",
+  "PhoneNumber":"555-123-4567"
+}
+
+
+=== 4. SEARCH CONTACTS ===
+POST http://142.93.67.135/API/SearchContacts.php
+
+{
+  "search":"Jane",
+  "userId":<USER_ID>
+}
+
+
+=== 5. EDIT CONTACT ===
+POST http://142.93.67.135/API/EditContact.php
+
+{
+  "id":<CONTACT_ID>,
+  "userId":<USER_ID>,
+  "firstName":"Jane",
+  "lastName":"Smith",
+  "email":"jane.smith@example.com",
+  "phone":"555-987-6543"
+}
+
+
+=== 6. DELETE CONTACT ===
+POST http://142.93.67.135/API/DeleteContact.php
+
+{
+  "id":<CONTACT_ID>,
+  "userId":<USER_ID>
+}
