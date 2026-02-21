@@ -46,7 +46,7 @@ function doLogin()
 
 				saveCookie();
 	
-				window.location.href = "contactsRoughTwo.html";
+				showSplashAndNavigate("contactsRoughTwo.html");
 			}
 		};
 		xhr.send(jsonPayload);
@@ -56,6 +56,14 @@ function doLogin()
 		document.getElementById("loginResult").innerHTML = err.message;
 	}
 
+}
+
+function showSplashAndNavigate(targetUrl)
+{
+	document.getElementById("splashOverlay").classList.add("active");
+	setTimeout(function() {
+		window.location.href = targetUrl;
+	}, 1000);
 }
 
 function saveCookie()
@@ -116,7 +124,15 @@ function doRegister()
 
 	let validationErrors = validateSignup(login, password);
     if (validationErrors.length > 0) {
-        document.getElementById("registerResult").innerHTML = validationErrors.join("<br>");
+		const errorsDiv = document.getElementById("registerResult");
+
+		if (validationErrors.length === 1) {
+    		errorsDiv.style.textAlign = "center";
+    		errorsDiv.innerHTML = validationErrors[0];
+		} else {
+    		errorsDiv.style.textAlign = "left";
+    		errorsDiv.innerHTML = "<ul><li>" + validationErrors.join("</li><li>") + "</li></ul>";
+		}
         return; 
     }
 
@@ -155,7 +171,7 @@ function doRegister()
 
 				saveCookie();
 
-				window.location.href = "color.html";
+				window.location.href = "contactsRoughTwo.html";
 			}
 		};
 		xhr.send(jsonPayload);
@@ -174,82 +190,6 @@ function doLogout()
 	lastName = "";
 	document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
 	window.location.href = "index.html";
-}
-
-function addColor()
-{
-	let newColor = document.getElementById("colorText").value;
-	document.getElementById("colorAddResult").innerHTML = "";
-
-	let tmp = {color:newColor,userId:userId};
-	let jsonPayload = JSON.stringify( tmp );
-
-	let url = urlBase + '/AddColor.' + extension;
-	
-	let xhr = new XMLHttpRequest();
-	xhr.open("POST", url, true);
-	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-	try
-	{
-		xhr.onreadystatechange = function() 
-		{
-			if (this.readyState == 4 && this.status == 200) 
-			{
-				document.getElementById("colorAddResult").innerHTML = "Color has been added";
-			}
-		};
-		xhr.send(jsonPayload);
-	}
-	catch(err)
-	{
-		document.getElementById("colorAddResult").innerHTML = err.message;
-	}
-	
-}
-
-function searchColor()
-{
-	let srch = document.getElementById("searchText").value;
-	document.getElementById("colorSearchResult").innerHTML = "";
-	
-	let colorList = "";
-
-	let tmp = {search:srch,userId:userId};
-	let jsonPayload = JSON.stringify( tmp );
-
-	let url = urlBase + '/SearchColors.' + extension;
-	
-	let xhr = new XMLHttpRequest();
-	xhr.open("POST", url, true);
-	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-	try
-	{
-		xhr.onreadystatechange = function() 
-		{
-			if (this.readyState == 4 && this.status == 200) 
-			{
-				document.getElementById("colorSearchResult").innerHTML = "Color(s) has been retrieved";
-				let jsonObject = JSON.parse( xhr.responseText );
-				
-				for( let i=0; i<jsonObject.results.length; i++ )
-				{
-					colorList += jsonObject.results[i];
-					if( i < jsonObject.results.length - 1 )
-					{
-						colorList += "<br />\r\n";
-					}
-				}
-				
-				document.getElementsByTagName("p")[0].innerHTML = colorList;
-			}
-		};
-		xhr.send(jsonPayload);
-	}
-	catch(err)
-	{
-		document.getElementById("colorSearchResult").innerHTML = err.message;
-	}
-	
 }
 
 document.addEventListener("DOMContentLoaded", () => {
