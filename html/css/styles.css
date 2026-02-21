@@ -194,6 +194,8 @@ select{
     font-family: 'Ubuntu', sans-serif;
     cursor: pointer;
     padding: 10px 20px;
+    color: #805326;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease;
 }
 
 .tabButton:hover {
