@@ -1,7 +1,7 @@
 body 
 {
     background-color: #707070;
-    background-image: url("../images/background.jpeg");
+    background-image: url("../images/background.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -106,12 +106,12 @@ body
 
 #loginTogglePassword {
     top: 5px;   
-    left: 87%;   
+    left: 89%;   
 }
 
 #signupTogglePassword {
     top: 7px;   
-    left: 83%;    
+    left: 89%;    
 }
 
 input[type="text"],input[type="password"]{
