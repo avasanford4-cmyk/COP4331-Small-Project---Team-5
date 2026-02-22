@@ -322,6 +322,29 @@ input[type="reset"],
   cursor: url("../images/conch-cursor.png") 4 2, auto;
 }
 
+#contactsTable {
+    margin: 10px auto;
+    border-collapse: collapse;
+    width: 90%;
+    text-align: center;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+#contactsTable th,
+#contactsTable td {
+    padding: 10px 15px;
+}
+
+#contactsTable th {
+    font-weight: bold;
+    border-bottom: 2px solid #3B270C;
+}
+
+#contactsTable input[type="text"]:focus {
+    box-shadow: 0 0 6px rgba(41, 74, 126, 0.5);
+    outline: none;
+}
+
 /* leave I-beam inline cursor */
 input[type="text"],
 input[type="password"],

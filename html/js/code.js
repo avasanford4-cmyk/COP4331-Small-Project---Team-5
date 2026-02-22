@@ -433,12 +433,12 @@ function validateSignup(username, password) {
                         let html = '<span class="success">Found ' + json.results.length + ' contact(s):</span><br>'
                             + '<table id="contactsTable">'
                             + '<tr>'
-                            + '<td>ID</td>'
-                            + '<td>First Name</td>'
-                            + '<td>Last Name</td>'
-                            + '<td>Email</td>'
-                            + '<td>Phone Number</td>'
-                            + '<td>Actions</td>'
+                            + '<th>ID</th>'
+                            + '<th>First Name</th>'
+                            + '<th>Last Name</th>'
+                            + '<th>Email</th>'
+                            + '<th>Phone Number</th>'
+                            + '<th>Actions</th>'
                             + '</tr>';
                         for (let i = 0; i < json.results.length; i++) {
                             let c = json.results[i];
@@ -469,6 +469,22 @@ function validateSignup(username, password) {
                 + '</tr>';
         }
 
+        function attachRowKeyboardNav(row, saveFn, cancelFn) {
+            let inputs = row.querySelectorAll("input[type='text']");
+            inputs.forEach(function(input) {
+                input.addEventListener("keydown", function(e) {
+                    if (e.key === "Enter") {
+                        e.preventDefault();
+                        saveFn();
+                    } else if (e.key === "Escape") {
+                        e.preventDefault();
+                        cancelFn();
+                    }
+                });
+            });
+            if (inputs.length > 0) inputs[0].focus();
+        }
+
         function editVariableContact(contactId) {
             let row = document.getElementById("contact-row-" + contactId);
             if (!row) return;
@@ -485,6 +501,11 @@ function validateSignup(username, password) {
             cells[4].innerHTML = '<input type="text" value="' + origPhone + '">';
             cells[5].innerHTML = '<button type="button" onclick="saveEditContact(' + contactId + ');">Save</button> '
                 + '<button type="button" onclick="cancelEditContact(' + contactId + ', \'' + origFirst.replace(/'/g, "\\'") + '\', \'' + origLast.replace(/'/g, "\\'") + '\', \'' + origEmail.replace(/'/g, "\\'") + '\', \'' + origPhone.replace(/'/g, "\\'") + '\');">Cancel</button>';
+
+            attachRowKeyboardNav(row,
+                function() { saveEditContact(contactId); },
+                function() { cancelEditContact(contactId, origFirst, origLast, origEmail, origPhone); }
+            );
         }
 
         function saveEditContact(contactId) {
@@ -538,7 +559,7 @@ function validateSignup(username, password) {
             if (!table) {
                 document.getElementById("contactSearchResult").innerHTML =
                     '<table id="contactsTable">'
-                    + '<tr><td>ID</td><td>First Name</td><td>Last Name</td><td>Email</td><td>Phone Number</td><td>Actions</td></tr>'
+                    + '<tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Phone Number</th><th>Actions</th></tr>'
                     + '</table>';
                 table = document.getElementById("contactsTable");
             }
@@ -554,6 +575,11 @@ function validateSignup(username, password) {
                 + '<button type="button" onclick="saveNewContact();">Save</button> '
                 + '<button type="button" onclick="cancelNewContact();">Cancel</button>'
                 + '</td>';
+
+            attachRowKeyboardNav(newRow,
+                function() { saveNewContact(); },
+                function() { cancelNewContact(); }
+            );
         }
 
         function saveNewContact() {
