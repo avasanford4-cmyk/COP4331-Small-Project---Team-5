@@ -52,7 +52,7 @@ function doLogin()
 
 				saveCookie();
 	
-				showSplashAndNavigate("contactsRoughTwo.html");
+				showSplashAndNavigate("contacts.html");
 			}
 		};
 		xhr.send(jsonPayload);
@@ -228,7 +228,7 @@ function doRegister()
 
 				saveCookie();
 
-				window.location.href = "contactsRoughTwo.html";
+				window.location.href = "contacts.html";
 			}
 		};
 		xhr.send(jsonPayload);
