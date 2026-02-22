@@ -17,6 +17,10 @@ function doLogin()
 	
 	document.getElementById("loginResult").innerHTML = "";
 
+    // Reset previous error highlights
+    document.getElementById("loginName").classList.remove("input-error");
+    document.getElementById("loginPassword").classList.remove("input-error");
+
 //	let tmp = {login:login,password:password};
 	var tmp = {login:login,password:hash};
 	let jsonPayload = JSON.stringify( tmp );
@@ -35,11 +39,13 @@ function doLogin()
 				let jsonObject = JSON.parse( xhr.responseText );
 				userId = jsonObject.id;
 		
-				if( userId < 1 )
-				{		
-					document.getElementById("loginResult").innerHTML = "User/Password combination incorrect";
-					return;
-				}
+				if (userId < 1) {
+                    // Login failed → show error and highlight fields
+                    document.getElementById("loginResult").innerHTML = "User/Password combination incorrect";
+                    document.getElementById("loginName").classList.add("input-error");
+                    document.getElementById("loginPassword").classList.add("input-error");
+                    return;
+                }
 		
 				firstName = jsonObject.firstName;
 				lastName = jsonObject.lastName;
@@ -55,6 +61,14 @@ function doLogin()
 	{
 		document.getElementById("loginResult").innerHTML = err.message;
 	}
+
+	// Optional: remove red highlight when user types
+    document.getElementById("loginName").addEventListener("input", function() {
+        this.classList.remove("input-error");
+    });
+    document.getElementById("loginPassword").addEventListener("input", function() {
+        this.classList.remove("input-error");
+    });
 
 }
 
@@ -116,25 +130,43 @@ function doRegister()
 	let login = document.getElementById("registerLogin").value;
 	let password = document.getElementById("registerPassword").value;
 
+	document.getElementById("registerFirstName").classList.remove("input-error");
+	document.getElementById("registerLastName").classList.remove("input-error");
+	document.getElementById("registerLogin").classList.remove("input-error");
+	document.getElementById("registerPassword").classList.remove("input-error");
+
 	if (firstName.trim() === "" || lastName.trim() === "" || login.trim() === "" || password.trim() === "")
 	{
 		document.getElementById("registerResult").innerHTML = "Please fill in all fields";
+		// Highlight empty fields only
+    	if (firstName.trim() === "") document.getElementById("registerFirstName").classList.add("input-error");
+   		if (lastName.trim() === "") document.getElementById("registerLastName").classList.add("input-error");
+    	if (login.trim() === "") document.getElementById("registerLogin").classList.add("input-error");
+    	if (password.trim() === "") document.getElementById("registerPassword").classList.add("input-error");
 		return;
 	}
 
-	let validationErrors = validateSignup(login, password);
-    if (validationErrors.length > 0) {
-		const errorsDiv = document.getElementById("registerResult");
+	const validation = validateSignup(login, password);
 
-		if (validationErrors.length === 1) {
-    		errorsDiv.style.textAlign = "center";
-    		errorsDiv.innerHTML = validationErrors[0];
-		} else {
-    		errorsDiv.style.textAlign = "left";
-    		errorsDiv.innerHTML = "<ul><li>" + validationErrors.join("</li><li>") + "</li></ul>";
-		}
-        return; 
-    }
+
+
+	if (validation.errors.length > 0) {
+    	const errorsDiv = document.getElementById("registerResult");
+
+    	if (validation.errors.length === 1) {
+        	errorsDiv.style.textAlign = "center";
+       		errorsDiv.innerHTML = validation.errors[0];
+    	} else {
+        	errorsDiv.style.textAlign = "left";
+        	errorsDiv.innerHTML = "<ul><li>" + validation.errors.join("</li><li>") + "</li></ul>";
+    	}
+
+    	// Highlight the fields that failed
+		if (validation.fields.username) document.getElementById("registerLogin").classList.add("input-error");
+    	if (validation.fields.password) document.getElementById("registerPassword").classList.add("input-error");
+
+    	return; // stop submission
+	}
 
 
 	var hash = md5( password );
@@ -253,34 +285,69 @@ document.addEventListener("DOMContentLoaded", function () {
     username.addEventListener("blur", hideRulesIfOutside);
     password.addEventListener("blur", hideRulesIfOutside);
 
+	    // Login password toggle
+    const loginPassword = document.getElementById("loginPassword");
+    const loginToggle = document.getElementById("loginTogglePassword");
+
+    loginToggle.addEventListener("click", () => {
+        if (loginPassword.type === "password") {
+            loginPassword.type = "text";
+            loginToggle.textContent = "🙈";
+        } else {
+            loginPassword.type = "password";
+            loginToggle.textContent = "👁️";
+        }
+    });
+
+    // Signup password toggle
+    const signupPassword = document.getElementById("registerPassword");
+    const signupToggle = document.getElementById("signupTogglePassword");
+
+    signupToggle.addEventListener("click", () => {
+        if (signupPassword.type === "password") {
+            signupPassword.type = "text";
+            signupToggle.textContent = "🙈";
+        } else {
+            signupPassword.type = "password";
+            signupToggle.textContent = "👁️";
+        }
+    });
+
 });
 
 function validateSignup(username, password) {
     let errors = [];
+	let fields = { username: false, password: false };
 
     // Username rules
     if (!/[a-zA-Z]/.test(username)) {
         errors.push("Username must include at least one letter.");
+		fields.username = true;
     }
     if (username.length < 3 || username.length > 22) {
         errors.push("Username must be 3–22 characters long.");
+		fields.username = true;
     }
 
     // Password rules
     if (password.length < 8) {
         errors.push("Password must be at least 8 characters.");
+		fields.password = true;
     }
     if (!/[a-zA-Z]/.test(password)) {
         errors.push("Password must include at least one letter.");
+		fields.password = true;
     }
     if (!/\d/.test(password)) {
         errors.push("Password must include at least one number.");
+		fields.password = true;
     }
     if (!/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password)) {
         errors.push("Password must include at least one special character.");
+		fields.password = true;
     }
 
-    return errors;
+    return { errors, fields };
 }
 
         // --- Search Contacts ---

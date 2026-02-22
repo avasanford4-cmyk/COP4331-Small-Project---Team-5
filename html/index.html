@@ -22,7 +22,10 @@
 	<div id="loginForm">
 		<span id="inner-title">PLEASE LOG IN</span>
 		<input type="text" id="loginName" placeholder="Username" /><br />
-		<input type="password" id="loginPassword" placeholder="Password"/><br />
+		<div style="position: relative;"> 
+			<input type="password" id="loginPassword" placeholder="Password"/><br />
+			<span id="loginTogglePassword" class="password-toggle">👁️</span>
+		</div>
 		<div id="loginResult"></div>
 		<button type="button" id="loginButton" class="buttons" onclick="doLogin();"> Login </button>
 	</div>
@@ -32,7 +35,10 @@
         <input type="text" id="registerFirstName" placeholder="First Name"/><span class="required">*</span><br/>
 		<input type="text" id="registerLastName" placeholder="Last Name"/><span class="required">*</span><br/>
 		<input type="text" id="registerLogin" placeholder="Username"/><span class="required">*</span><br/>
-        <input type="password" id="registerPassword" placeholder="Password"/><span class="required">*</span><br/>
+		<div style="position: relative;">
+        	<input type="password" id="registerPassword" placeholder="Password"/><span class="required">*</span><br/>
+			<span id="signupTogglePassword" class="password-toggle">👁️</span>
+		</div>
 		<div id="registerResult"></div>
         <button type="button" id="signupButton" class="buttons" onclick="doRegister()">Sign Up</button>
 
