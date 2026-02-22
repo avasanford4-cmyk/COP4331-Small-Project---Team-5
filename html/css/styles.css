@@ -296,6 +296,8 @@ button:hover {
     transform: scale(1.08);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     outline: 2px solid #294A7E;
+}
+
 #registerResult ul {
     list-style-type: none;
     padding-left: 20px; 
@@ -334,9 +336,9 @@ button, a, [role="button"], input[type="submit"], input[type="button"] {
   cursor: url("../images/conch-cursor.png") 4 2, pointer !important;
 }
 
-/* Splash screen overlay */
+/* Splash screen overlay – visible on page load */
 #splashOverlay {
-  display: none;
+  display: flex;
   position: fixed;
   top: 0;
   left: 0;
@@ -354,8 +356,8 @@ button, a, [role="button"], input[type="submit"], input[type="button"] {
 
 #splashSpinner {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 200px;
+  height: 200px;
 }
 
 #splashSpinner::before {
@@ -363,8 +365,8 @@ button, a, [role="button"], input[type="submit"], input[type="button"] {
   position: absolute;
   top: -8px;
   left: -8px;
-  width: 136px;
-  height: 136px;
+  width: 216px;
+  height: 216px;
   border-radius: 50%;
   border: 4px solid rgba(255, 255, 255, 0.2);
   border-top-color: #fff;
@@ -376,12 +378,9 @@ button, a, [role="button"], input[type="submit"], input[type="button"] {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
+  width: 200px;
+  height: 200px;
   object-fit: contain;
-  border-radius: 50%;
-  background-color: rgba(217, 226, 240, 0.85);
-  padding: 20px;
 }
 
 @keyframes splash-chase {

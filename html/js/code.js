@@ -74,11 +74,36 @@ function doLogin()
 
 function showSplashAndNavigate(targetUrl)
 {
-	document.getElementById("splashOverlay").classList.add("active");
+	document.getElementById("splashOverlay").style.display = "flex";
 	setTimeout(function() {
 		window.location.href = targetUrl;
 	}, 1000);
 }
+
+// --- Page-load splash screen ---
+// Hides after BOTH the minimum time AND page load are complete (whichever is last).
+(function() {
+	var MINIMUM_SPLASH_MS = 1000;
+	var timerDone = false;
+	var pageLoaded = false;
+
+	function hideSplashIfReady() {
+		if (timerDone && pageLoaded) {
+			var overlay = document.getElementById("splashOverlay");
+			if (overlay) overlay.style.display = "none";
+		}
+	}
+
+	setTimeout(function() {
+		timerDone = true;
+		hideSplashIfReady();
+	}, MINIMUM_SPLASH_MS);
+
+	window.addEventListener("load", function() {
+		pageLoaded = true;
+		hideSplashIfReady();
+	});
+})();
 
 function saveCookie()
 {
