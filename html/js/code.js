@@ -74,7 +74,7 @@ function doLogin()
 
 function showSplashAndNavigate(targetUrl)
 {
-	document.getElementById("splashOverlay").classList.add("active");
+	document.getElementById("splashOverlay").style.display = "flex";
 	setTimeout(function() {
 		window.location.href = targetUrl;
 	}, 1000);
