@@ -69,12 +69,13 @@ body
     width: 50%;
     margin-left: 25%;
     font-family: 'Ubuntu', sans-serif;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease;
 }
 
 .buttons:hover{
-    background-color: #00d5124f;
-    color: #FFFFFF;
-    opacity: 50%;
+    transform: scale(1.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    outline: 2px solid #294A7E;
 }
 
 #loginName
@@ -184,20 +185,25 @@ select{
 
 
 #loginToggle {
-    position: fixed;     
-    top: 20px;            
-    right: 20px;         
-    width: 200px;         
-    height: 50px;      
-    font-size: 24px;      
-    border-radius: 25px;  
-    background-color: #dbad8a;  
-    color: #fff;         
-    z-index: 1000;        
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 200px;
+    height: 50px;
+    font-size: 24px;
+    border-radius: 25px;
+    background-color: #dbad8a;
+    color: #fff;
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease, background-color 0.2s ease;
 }
 
 #loginToggle:hover {
-    background-color: #c18b6e; 
+    background-color: #c18b6e;
+    transform: scale(1.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    outline: 2px solid #294A7E;
 }
 
 
@@ -214,13 +220,23 @@ select{
     border: none;
     font-size: 20px;
     font-family: 'Ubuntu', sans-serif;
+    cursor: pointer;
     padding: 10px 20px;
+    color: #805326;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease;
+}
+
+.tabButton:hover {
+    transform: scale(1.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    outline: 2px solid #294A7E;
     color: #3B270C;
     transition: 0.3s;
 }
 
 .tabButton.active {
     border-bottom: 3px solid #3B270C; 
+    border-bottom: 3px solid #805326; 
     font-weight: bold;
 }
 
@@ -250,6 +266,7 @@ select{
     display: none;           
     font-size: 16px;
     color: #3B270C;           
+    font-size: 18px;
     margin-top: 15px;        
 }
 
@@ -271,6 +288,14 @@ select{
     font-family: 'Ubuntu', sans-serif;
 }
 
+button {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease;
+}
+
+button:hover {
+    transform: scale(1.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    outline: 2px solid #294A7E;
 #registerResult ul {
     list-style-type: none;
     padding-left: 20px; 
