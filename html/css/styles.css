@@ -103,15 +103,15 @@ body
     font-size: 1.2em;
 }
 
-/* Separate positions for login and signup */
+
 #loginTogglePassword {
-    top: 5px;   /* adjust vertically to line up with login password */
-    left: 87%;    /* or right: 15px; — whichever works for your layout */
+    top: 5px;   
+    left: 87%;   
 }
 
 #signupTogglePassword {
-    top: 7px;   /* adjust vertically to line up with signup password */
-    left: 83%;    /* or right: 15px; */
+    top: 7px;   
+    left: 83%;    
 }
 
 input[type="text"],input[type="password"]{
