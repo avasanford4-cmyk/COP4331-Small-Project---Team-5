@@ -392,8 +392,13 @@ function validateSignup(username, password) {
         }
 
         function validatePhone(phone) {
-            let digits = phone.replace(/[-() ]/g, '');
+            let digits = phone.replace(/[-().() ]/g, '');
             return /^\d{10}$/.test(digits);
+        }
+
+        function formatPhone(phone) {
+            let digits = phone.replace(/\D/g, '');
+            return digits.slice(0, 3) + '-' + digits.slice(3, 6) + '-' + digits.slice(6, 10);
         }
 
         // --- Search Contacts ---
@@ -544,6 +549,7 @@ function validateSignup(username, password) {
                 showToast(errors.join(" "), "error");
                 return;
             }
+            phone = formatPhone(phone);
 
             let payload = JSON.stringify({
                 id: contactId,
@@ -624,6 +630,8 @@ function validateSignup(username, password) {
                 showToast(errors.join(" "), "error");
                 return;
             }
+
+            phone = formatPhone(phone);
 
             let payload = JSON.stringify({
                 FirstName: fName,
