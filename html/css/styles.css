@@ -296,6 +296,8 @@ button:hover {
     transform: scale(1.08);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     outline: 2px solid #294A7E;
+}
+
 #registerResult ul {
     list-style-type: none;
     padding-left: 20px; 
@@ -334,9 +336,9 @@ button, a, [role="button"], input[type="submit"], input[type="button"] {
   cursor: url("../images/conch-cursor.png") 4 2, pointer !important;
 }
 
-/* Splash screen overlay */
+/* Splash screen overlay – visible on page load */
 #splashOverlay {
-  display: none;
+  display: flex;
   position: fixed;
   top: 0;
   left: 0;
