@@ -433,7 +433,7 @@ function validateSignup(username, password) {
                         let html = '<span class="success">Found ' + json.results.length + ' contact(s):</span><br>'
                             + '<table id="contactsTable">'
                             + '<tr>'
-                            + '<th>ID</th>'
+                            + '<th style="display:none">ID</th>'
                             + '<th>First Name</th>'
                             + '<th>Last Name</th>'
                             + '<th>Email</th>'
@@ -457,7 +457,7 @@ function validateSignup(username, password) {
         function buildContactRow(id, firstName, lastName, email, phone) {
             let safeName = (firstName + ' ' + lastName).replace(/'/g, "\\'");
             return '<tr id="contact-row-' + id + '">'
-                + '<td>' + id + '</td>'
+                + '<td style="display:none">' + id + '</td>'
                 + '<td>' + firstName + '</td>'
                 + '<td>' + lastName + '</td>'
                 + '<td>' + email + '</td>'
@@ -559,14 +559,14 @@ function validateSignup(username, password) {
             if (!table) {
                 document.getElementById("contactSearchResult").innerHTML =
                     '<table id="contactsTable">'
-                    + '<tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Phone Number</th><th>Actions</th></tr>'
+                    + '<tr><th style="display:none">ID</th><th>First Name</th><th>Last Name</th><th>Email</th><th>Phone Number</th><th>Actions</th></tr>'
                     + '</table>';
                 table = document.getElementById("contactsTable");
             }
 
             let newRow = table.insertRow(-1);
             newRow.id = "contact-row-new";
-            newRow.innerHTML = '<td>—</td>'
+            newRow.innerHTML = '<td style="display:none">—</td>'
                 + '<td><input type="text" placeholder="First Name"></td>'
                 + '<td><input type="text" placeholder="Last Name"></td>'
                 + '<td><input type="text" placeholder="Email"></td>'
