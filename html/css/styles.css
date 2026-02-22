@@ -409,3 +409,39 @@ button, a, [role="button"], input[type="submit"], input[type="button"] {
 @keyframes splash-chase {
   to { transform: rotate(360deg); }
 }
+
+/* Toast notification */
+.toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #3B270C;
+  padding: 20px 40px;
+  border-radius: 12px;
+  font-size: 22px;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: bold;
+  outline: 3px solid #294A7E;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.toast-success {
+  background-color: #d4edda;
+}
+
+.toast-error {
+  background-color: #f8d7da;
+}
+
+.toast.show {
+  opacity: 1;
+}
+
+.toast.fade-out {
+  opacity: 0;
+}

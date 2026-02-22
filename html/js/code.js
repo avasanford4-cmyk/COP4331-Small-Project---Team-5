@@ -5,6 +5,18 @@ let userId = 0;
 let firstName = "";
 let lastName = "";
 
+let toastTimer = null;
+function showToast(message, type) {
+    let toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.className = "toast " + (type === "error" ? "toast-error" : "toast-success") + " show";
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() {
+        toast.classList.add("fade-out");
+        toast.classList.remove("show");
+    }, 3000);
+}
+
 function doLogin()
 {
 	userId = 0;
@@ -375,6 +387,15 @@ function validateSignup(username, password) {
     return { errors, fields };
 }
 
+        function validateEmail(email) {
+            return /^[^+]+@.+\..+$/.test(email);
+        }
+
+        function validatePhone(phone) {
+            let digits = phone.replace(/[-() ]/g, '');
+            return /^\d{10}$/.test(digits);
+        }
+
         // --- Search Contacts ---
         function searchContact() {
             let srch = document.getElementById("searchText").value;
@@ -516,6 +537,14 @@ function validateSignup(username, password) {
             let email = inputs[2].value;
             let phone = inputs[3].value;
 
+            let errors = [];
+            if (!validateEmail(email)) errors.push("Invalid email address.");
+            if (!validatePhone(phone)) errors.push("Phone number must be 10 digits.");
+            if (errors.length > 0) {
+                showToast(errors.join(" "), "error");
+                return;
+            }
+
             let payload = JSON.stringify({
                 id: contactId,
                 userId: userId,
@@ -534,18 +563,16 @@ function validateSignup(username, password) {
                     if (this.readyState == 4 && this.status == 200) {
                         let json = JSON.parse(xhr.responseText);
                         if (json.error && json.error.length > 0) {
-                            document.getElementById("contactDeleteResult").innerHTML =
-                                '<span class="error">Error: ' + json.error + '</span>';
+                            showToast(json.error, "error");
                         } else {
                             row.outerHTML = buildContactRow(contactId, fName, lName, email, phone);
-                            document.getElementById("contactDeleteResult").innerHTML =
-                                '<span class="success">Contact updated successfully</span>';
+                            showToast("Contact edited");
                         }
                     }
                 };
                 xhr.send(payload);
             } catch(err) {
-                document.getElementById("contactDeleteResult").innerHTML = '<span class="error">' + err.message + '</span>';
+                showToast(err.message, "error");
             }
         }
 
@@ -590,6 +617,14 @@ function validateSignup(username, password) {
             let email = inputs[2].value;
             let phone = inputs[3].value;
 
+            let errors = [];
+            if (!validateEmail(email)) errors.push("Invalid email address.");
+            if (!validatePhone(phone)) errors.push("Phone number must be 10 digits.");
+            if (errors.length > 0) {
+                showToast(errors.join(" "), "error");
+                return;
+            }
+
             let payload = JSON.stringify({
                 FirstName: fName,
                 LastName: lName,
@@ -607,19 +642,17 @@ function validateSignup(username, password) {
                     if (this.readyState == 4 && this.status == 200) {
                         let json = JSON.parse(xhr.responseText);
                         if (json.error && json.error.length > 0) {
-                            document.getElementById("contactAddResult").innerHTML =
-                                '<span class="error">Error: ' + json.error + '</span>';
+                            showToast(json.error, "error");
                         } else {
                             let newId = json.id || 0;
                             row.outerHTML = buildContactRow(newId, fName, lName, email, phone);
-                            document.getElementById("contactAddResult").innerHTML =
-                                '<span class="success">Contact added successfully</span>';
+                            showToast("Contact added");
                         }
                     }
                 };
                 xhr.send(payload);
             } catch(err) {
-                document.getElementById("contactAddResult").innerHTML = '<span class="error">' + err.message + '</span>';
+                showToast(err.message, "error");
             }
         }
 
@@ -644,23 +677,20 @@ function validateSignup(username, password) {
                     if (this.readyState == 4 && this.status == 200) {
                         let json = JSON.parse(xhr.responseText);
                         if (json.error && json.error.length > 0) {
-                            document.getElementById("contactDeleteResult").innerHTML =
-                                '<span class="error">Error: ' + json.error + '</span>';
+                            showToast(json.error, "error");
                         } else {
-                            document.getElementById("contactDeleteResult").innerHTML =
-                                '<span class="success">Contact deleted: ' + JSON.stringify(json) + '</span>';
+                            showToast("Contact deleted");
                         }
                     }
                 };
                 xhr.send(payload);
             } catch(err) {
-                document.getElementById("contactDeleteResult").innerHTML = '<span class="error">' + err.message + '</span>';
+                showToast(err.message, "error");
             }
         }
-		
+
 		function deleteVariableContact(contactId, fullName) {
             if (!confirm('Are you sure you want to delete ' + fullName + '? This is permanent and cannot be undone.')) return;
-            document.getElementById("contactDeleteResult").innerHTML = "";
 
             let payload = JSON.stringify({id: contactId, userId: userId});
             let url = urlBase + '/DeleteContact.' + extension;
@@ -673,16 +703,15 @@ function validateSignup(username, password) {
                     if (this.readyState == 4 && this.status == 200) {
                         let json = JSON.parse(xhr.responseText);
                         if (json.error && json.error.length > 0) {
-                            document.getElementById("contactDeleteResult").innerHTML =
-                                '<span class="error">Error: ' + json.error + '</span>';
+                            showToast(json.error, "error");
                         } else {
-                            document.getElementById("contactDeleteResult").innerHTML =
-                                '<span class="success">Contact deleted: ' + JSON.stringify(json) + '</span>';
+                            showToast("Contact deleted");
+                            modifiedSearchContact();
                         }
                     }
                 };
                 xhr.send(payload);
             } catch(err) {
-                document.getElementById("contactDeleteResult").innerHTML = '<span class="error">' + err.message + '</span>';
+                showToast(err.message, "error");
             }
         }
