@@ -429,22 +429,15 @@ function validateSignup(username, password) {
                                 '<span class="error">Error: ' + json.error + '</span>';
                             return;
                         }
-
-                        let html = '<span class="success">Found ' + json.results.length + ' contact(s):</span><br>'
-                            + '<table id="contactsTable">'
-                            + '<tr>'
-                            + '<td>ID</td>'
-                            + '<td>First Name</td>'
-                            + '<td>Last Name</td>'
-                            + '<td>Email</td>'
-                            + '<td>Phone Number</td>'
-                            + '<td>Actions</td>'
-                            + '</tr>';
+						
+						// We want the success to be above other elements, so we 
+                        let htmlSuccessBanner = '<span class="success">Found ' + json.results.length + ' contact(s):</span><br>';
+						let html = "";
                         for (let i = 0; i < json.results.length; i++) {
                             let c = json.results[i];
                             html += buildContactRow(c.id, c.firstName, c.lastName, c.email, c.phone);
                         }
-                        html += '</table>';
+                        // html += '</table>';
                         document.getElementById("contactSearchResult").innerHTML = html;
                     }
                 };

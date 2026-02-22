@@ -26,12 +26,32 @@
 	<br />
 
 	<span id="contactDeleteResult"></span>
+	<span id="searchSuccess"></span>
+	<span id="contactAddResult"></span>
+	
+	<table id="contactsTable">'
+        <tr>
+            <td>ID</td>
+            <td>First Name</td>
+            <td>Last Name</td>
+            <td>Email</td>
+            <td>Phone Number</td>
+            <td>Actions</td>
+        </tr>
+		<tr id="contact-row-new">
+            <td>Non-Alterable</td>
+            <td><input type="text" id="firstNameInput" placeholder="First Name"/></td>
+            <td><input type="text" id="lastNameInput" placeholder="Last Name"/></td>
+            <td><input type="text" id="emailInput" placeholder="Email"/></td>
+            <td><input type="text" id="phoneNumberInput" placeholder="Search Contacts"/></td>
+            <td><button type="button" id="addButton" onclick="saveNewContact()";></button></td>
+        </tr>
+		<span id="contactSearchResult"></span>
+	</table>
 
 	<input type="text" id="searchText" placeholder="Search Contacts"/>
 	<button type="button" id="searchColorButton" class="buttons" onclick="modifiedSearchContact();"> Search Contacts </button>
 	<button type="button" id="addContactButton" class="buttons" onclick="addContactRow();"> Add Contact </button><br />
-	<span id="contactSearchResult"></span>
-	<span id="contactAddResult"></span>
 	<p id="colorList">
 	</p>
 </div>
