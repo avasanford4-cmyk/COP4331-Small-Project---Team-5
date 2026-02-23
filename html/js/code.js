@@ -240,7 +240,17 @@ function doRegister()
 
 				saveCookie();
 
-				window.location.href = "contacts.html";
+				// Brief success state on signup button before navigating
+				var signupBtn = document.getElementById("signupButton");
+				if (signupBtn) {
+					signupBtn.textContent = "\u2713";
+					signupBtn.classList.add("btn-success-state");
+					setTimeout(function() {
+						window.location.href = "contacts.html";
+					}, 300);
+				} else {
+					window.location.href = "contacts.html";
+				}
 			}
 		};
 		xhr.send(jsonPayload);
@@ -265,13 +275,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginToggle = document.getElementById("loginToggle");
     const loginDiv = document.getElementById("loginDiv");
 
-    loginToggle.addEventListener("click", () => {
-        if (loginDiv.style.display === "none" || loginDiv.style.display === "") {
-            loginDiv.style.display = "block"; 
-        } else {
-            loginDiv.style.display = "none"; 
-        }
-    });
+    if (loginToggle && loginDiv) {
+        loginToggle.addEventListener("click", () => {
+            if (loginDiv.style.display === "none" || loginDiv.style.display === "") {
+                loginDiv.style.display = "block";
+            } else {
+                loginDiv.style.display = "none";
+            }
+        });
+    }
+
+    // Autofocus first login input
+    var loginNameInput = document.getElementById("loginName");
+    if (loginNameInput) loginNameInput.focus();
 });
 
 
@@ -451,7 +467,12 @@ function validateSignup(username, password) {
 		
 		function modifiedSearchContact() {
             let srch = document.getElementById("searchText").value;
-            document.getElementById("contactSearchResult").innerHTML = "";
+            let resultContainer = document.getElementById("contactSearchResult");
+
+            // Fade out existing results briefly before replacing
+            if (resultContainer.innerHTML.trim() !== "") {
+                resultContainer.classList.add("fading");
+            }
 
             let payload = JSON.stringify({search: srch, userId: userId});
             let url = urlBase + '/SearchContacts.' + extension;
@@ -463,7 +484,10 @@ function validateSignup(username, password) {
                 xhr.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200) {
                         let json = JSON.parse(xhr.responseText);
+                        resultContainer.classList.remove("fading");
+
                         if (json.error && json.error.length > 0) {
+                            resultContainer.innerHTML = "";
                             showToast(json.error, "error");
                             return;
                         }
@@ -483,7 +507,14 @@ function validateSignup(username, password) {
                             html += buildContactRow(c.id, c.firstName, c.lastName, c.email, c.phone);
                         }
                         html += '</table>';
-                        document.getElementById("contactSearchResult").innerHTML = html;
+                        resultContainer.innerHTML = html;
+
+                        // Staggered fade-in-up on each result row
+                        var rows = resultContainer.querySelectorAll("#contactsTable tr");
+                        for (var ri = 1; ri < rows.length; ri++) {
+                            rows[ri].classList.add("fade-in-up");
+                            rows[ri].style.animationDelay = (ri * 40) + "ms";
+                        }
                     }
                 };
                 xhr.send(payload);
@@ -533,12 +564,56 @@ function validateSignup(username, password) {
             let origEmail = cells[3].innerText;
             let origPhone = cells[4].innerText;
 
-            cells[1].innerHTML = '<input type="text" value="' + origFirst + '">';
-            cells[2].innerHTML = '<input type="text" value="' + origLast + '">';
-            cells[3].innerHTML = '<input type="text" value="' + origEmail + '">';
-            cells[4].innerHTML = '<input type="text" value="' + origPhone + '">';
-            cells[5].innerHTML = '<button type="button" onclick="saveEditContact(' + contactId + ');">Save</button> '
-                + '<button type="button" onclick="cancelEditContact(' + contactId + ', \'' + origFirst.replace(/'/g, "\\'") + '\', \'' + origLast.replace(/'/g, "\\'") + '\', \'' + origEmail.replace(/'/g, "\\'") + '\', \'' + origPhone.replace(/'/g, "\\'") + '\');">Cancel</button>';
+            // Store original values as data attributes for change detection on save
+            row.setAttribute("data-orig-first", origFirst);
+            row.setAttribute("data-orig-last", origLast);
+            row.setAttribute("data-orig-email", origEmail);
+            row.setAttribute("data-orig-phone", origPhone);
+
+            // Crossfade morph: text → input for each editable cell
+            var editableCells = [cells[1], cells[2], cells[3], cells[4]];
+            var origValues = [origFirst, origLast, origEmail, origPhone];
+
+            editableCells.forEach(function(cell, idx) {
+                var textSpan = document.createElement("span");
+                textSpan.className = "cell-morph-text";
+                textSpan.textContent = origValues[idx];
+
+                var input = document.createElement("input");
+                input.type = "text";
+                input.value = origValues[idx];
+                input.style.opacity = "0";
+                input.style.position = "absolute";
+                input.style.left = "0";
+                input.style.top = "50%";
+                input.style.transform = "translateY(-50%)";
+                input.style.width = "90%";
+
+                cell.textContent = "";
+                cell.style.position = "relative";
+                cell.appendChild(textSpan);
+                cell.appendChild(input);
+
+                // Trigger crossfade after a frame
+                requestAnimationFrame(function() {
+                    textSpan.classList.add("fading");
+                    input.style.opacity = "1";
+                    input.style.position = "relative";
+                    input.style.left = "";
+                    input.style.top = "";
+                    input.style.transform = "";
+
+                    // After transition, clean up the text span and reveal input border
+                    setTimeout(function() {
+                        if (textSpan.parentNode) textSpan.remove();
+                        input.classList.add("morph-visible");
+                    }, 180);
+                });
+            });
+
+            // Save/Cancel buttons with fade-in animation
+            cells[5].innerHTML = '<button type="button" class="action-fade-in" onclick="saveEditContact(' + contactId + ');">Save</button> '
+                + '<button type="button" class="action-fade-in" onclick="cancelEditContact(' + contactId + ', \'' + origFirst.replace(/'/g, "\\'") + '\', \'' + origLast.replace(/'/g, "\\'") + '\', \'' + origEmail.replace(/'/g, "\\'") + '\', \'' + origPhone.replace(/'/g, "\\'") + '\');">Cancel</button>';
 
             attachRowKeyboardNav(row,
                 function() { saveEditContact(contactId); },
@@ -587,8 +662,38 @@ function validateSignup(username, password) {
                         if (json.error && json.error.length > 0) {
                             showToast(json.error, "error");
                         } else {
+                            // Read original values stored during edit mode
+                            var origFirst = row.getAttribute("data-orig-first") || "";
+                            var origLast = row.getAttribute("data-orig-last") || "";
+                            var origEmail = row.getAttribute("data-orig-email") || "";
+                            var origPhone = row.getAttribute("data-orig-phone") || "";
+
                             row.outerHTML = buildContactRow(contactId, fName, lName, email, phone);
-                            showToast("Contact edited");
+
+                            // Highlight changed cells (or whole row as fallback)
+                            var savedRow = document.getElementById("contact-row-" + contactId);
+                            if (savedRow) {
+                                var cells = savedRow.getElementsByTagName("td");
+                                var changed = [
+                                    fName !== origFirst,
+                                    lName !== origLast,
+                                    email !== origEmail,
+                                    phone !== origPhone
+                                ];
+                                var anyChanged = changed.some(function(c) { return c; });
+
+                                if (anyChanged) {
+                                    // Highlight only the changed cells
+                                    for (var ci = 0; ci < changed.length; ci++) {
+                                        if (changed[ci]) {
+                                            cells[ci + 1].classList.add("cell-highlight");
+                                        }
+                                    }
+                                } else {
+                                    // No detectable changes, highlight entire row
+                                    savedRow.classList.add("row-highlight");
+                                }
+                            }
                         }
                     }
                 };
@@ -624,6 +729,10 @@ function validateSignup(username, password) {
                 + '<button type="button" onclick="saveNewContact();">Save</button> '
                 + '<button type="button" onclick="cancelNewContact();">Cancel</button>'
                 + '</td>';
+
+            // Row entrance animation
+            newRow.classList.add("fade-in-up");
+            newRow.classList.add("row-highlight");
 
             attachRowKeyboardNav(newRow,
                 function() { saveNewContact(); },
@@ -674,7 +783,12 @@ function validateSignup(username, password) {
                         } else {
                             let newId = json.id || 0;
                             row.outerHTML = buildContactRow(newId, fName, lName, email, phone);
-                            showToast("Contact added");
+                            // Highlight the newly saved row instead of showing a toast
+                            var savedRow = document.getElementById("contact-row-" + newId);
+                            if (savedRow) {
+                                savedRow.classList.add("row-highlight");
+                                savedRow.classList.add("fade-in-up");
+                            }
                         }
                     }
                 };
@@ -778,6 +892,10 @@ document.addEventListener("DOMContentLoaded", function() {
                         if (json.error && json.error.length > 0) {
                             showToast(json.error, "error");
                         } else {
+                            // Remove the row immediately so it never lingers
+                            var deletedRow = document.getElementById("contact-row-" + contactId);
+                            if (deletedRow) deletedRow.remove();
+
                             showToast("Contact deleted");
                             modifiedSearchContact();
                         }

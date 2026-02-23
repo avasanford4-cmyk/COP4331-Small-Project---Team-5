@@ -471,3 +471,116 @@ input[type="password"]:focus-visible,
     outline: 2px solid #294A7E;
     box-shadow: 0 0 6px rgba(41, 74, 126, 0.5);
 }
+
+
+:root {
+    --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- Keyframes --- */
+
+@keyframes row-highlight {
+    0%   { background-color: rgba(41, 74, 126, 0.18); }
+    100% { background-color: transparent; }
+}
+
+@keyframes fade-in-up {
+    0%   { opacity: 0; transform: translateY(6px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+    0%   { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes modal-enter {
+    0%   { opacity: 0; transform: scale(0.97); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* --- Utility Classes --- */
+
+.row-highlight {
+    animation: row-highlight 800ms var(--ease-out) forwards;
+}
+
+.cell-highlight {
+    animation: row-highlight 800ms var(--ease-out) forwards;
+}
+
+.fade-in-up {
+    animation: fade-in-up 180ms var(--ease-out) both;
+}
+
+.action-fade-in {
+    animation: fade-in-up 150ms var(--ease-out) both;
+}
+
+/* --- Login Modal Entrance --- */
+
+#loginDiv {
+    animation: modal-enter 220ms var(--ease-out) both;
+}
+
+/* --- Signup Success Button State --- */
+
+.btn-success-state {
+    background-color: #6fbf73 !important;
+    color: #fff !important;
+    transition: background-color 200ms var(--ease-out);
+}
+
+/* --- Search Results Fade --- */
+
+#contactSearchResult.fading {
+    opacity: 0.6;
+    transition: opacity 80ms var(--ease-out);
+}
+
+#contactSearchResult {
+    transition: opacity 80ms var(--ease-out);
+}
+
+/* --- Edit Mode Morph: Crossfade Text → Input --- */
+
+#contactsTable td {
+    position: relative;
+}
+
+.cell-morph-text {
+    display: inline-block;
+    transition: opacity 180ms var(--ease-out);
+}
+
+.cell-morph-text.fading {
+    opacity: 0;
+}
+
+#contactsTable td input[type="text"] {
+    border-color: transparent;
+    background-color: transparent;
+    transition: border-color 180ms var(--ease-out), background-color 180ms var(--ease-out), opacity 180ms var(--ease-out);
+    width: 90%;
+    text-align: center;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: inherit;
+    padding: 2px 4px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+}
+
+#contactsTable td input[type="text"].morph-visible {
+    border-color: #294A7E;
+    background-color: rgba(255, 255, 255, 0.85);
+}
+
+/* --- Reduced Motion --- */
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
