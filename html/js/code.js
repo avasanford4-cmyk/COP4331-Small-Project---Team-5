@@ -327,12 +327,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const loginToggle = document.getElementById("loginTogglePassword");
 
     function toggleLoginPassword() {
+        var img = loginToggle.querySelector("img");
         if (loginPassword.type === "password") {
             loginPassword.type = "text";
-            loginToggle.textContent = "🙈";
+            img.src = "images/openshell.png";
+            img.alt = "Hide password";
         } else {
             loginPassword.type = "password";
-            loginToggle.textContent = "👁️";
+            img.src = "images/closedshell.png";
+            img.alt = "Show password";
         }
     }
     loginToggle.addEventListener("click", toggleLoginPassword);
@@ -345,12 +348,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const signupToggle = document.getElementById("signupTogglePassword");
 
     function toggleSignupPassword() {
+        var img = signupToggle.querySelector("img");
         if (signupPassword.type === "password") {
             signupPassword.type = "text";
-            signupToggle.textContent = "🙈";
+            img.src = "images/openshell.png";
+            img.alt = "Hide password";
         } else {
             signupPassword.type = "password";
-            signupToggle.textContent = "👁️";
+            img.src = "images/closedshell.png";
+            img.alt = "Show password";
         }
     }
     signupToggle.addEventListener("click", toggleSignupPassword);
