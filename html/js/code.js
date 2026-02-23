@@ -64,7 +64,7 @@ function doLogin()
 
 				saveCookie();
 	
-				showSplashAndNavigate("contactsRoughTwo.html");
+				showSplashAndNavigate("contacts.html");
 			}
 		};
 		xhr.send(jsonPayload);
@@ -240,7 +240,7 @@ function doRegister()
 
 				saveCookie();
 
-				window.location.href = "contactsRoughTwo.html";
+				window.location.href = "contacts.html";
 			}
 		};
 		xhr.send(jsonPayload);
@@ -417,8 +417,7 @@ function validateSignup(username, password) {
                     if (this.readyState == 4 && this.status == 200) {
                         let json = JSON.parse(xhr.responseText);
                         if (json.error && json.error.length > 0) {
-                            document.getElementById("contactSearchResult").innerHTML =
-                                '<span class="error">Error: ' + json.error + '</span>';
+                            showToast(json.error, "error");
                             return;
                         }
 
@@ -432,7 +431,7 @@ function validateSignup(username, password) {
                 };
                 xhr.send(payload);
             } catch(err) {
-                document.getElementById("contactSearchResult").innerHTML = '<span class="error">' + err.message + '</span>';
+                showToast(err.message, "error");
             }
         }
 		
@@ -451,8 +450,7 @@ function validateSignup(username, password) {
                     if (this.readyState == 4 && this.status == 200) {
                         let json = JSON.parse(xhr.responseText);
                         if (json.error && json.error.length > 0) {
-                            document.getElementById("contactSearchResult").innerHTML =
-                                '<span class="error">Error: ' + json.error + '</span>';
+                            showToast(json.error, "error");
                             return;
                         }
 
@@ -476,7 +474,7 @@ function validateSignup(username, password) {
                 };
                 xhr.send(payload);
             } catch(err) {
-                document.getElementById("contactSearchResult").innerHTML = '<span class="error">' + err.message + '</span>';
+                showToast(err.message, "error");
             }
         }
 
@@ -672,7 +670,6 @@ function validateSignup(username, password) {
         // --- Delete Contact ---
         function deleteContact() {
             let contactId = parseInt(document.getElementById("deleteContactId").value);
-            document.getElementById("contactDeleteResult").innerHTML = "";
 
             let payload = JSON.stringify({id: contactId, userId: userId});
             let url = urlBase + '/DeleteContact.' + extension;
@@ -696,6 +693,52 @@ function validateSignup(username, password) {
                 showToast(err.message, "error");
             }
         }
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Login form: Enter to submit
+    var loginFields = ["loginName", "loginPassword"];
+    loginFields.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) {
+            el.addEventListener("keydown", function(e) {
+                if (e.key === "Enter") { e.preventDefault(); doLogin(); }
+            });
+        }
+    });
+
+    // Signup form: Enter to submit
+    var signupFields = ["registerFirstName", "registerLastName", "registerLogin", "registerPassword"];
+    signupFields.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) {
+            el.addEventListener("keydown", function(e) {
+                if (e.key === "Enter") { e.preventDefault(); doRegister(); }
+            });
+        }
+    });
+
+    // Contacts search: Enter to search
+    var searchBox = document.getElementById("searchText");
+    if (searchBox) {
+        searchBox.addEventListener("keydown", function(e) {
+            if (e.key === "Enter") { e.preventDefault(); modifiedSearchContact(); }
+        });
+    }
+
+    // Tab buttons: Enter/Space to activate
+    var loginTab = document.getElementById("loginTab");
+    if (loginTab) {
+        loginTab.addEventListener("keydown", function(e) {
+            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showLogin(); }
+        });
+    }
+    var signupTab = document.getElementById("signupTab");
+    if (signupTab) {
+        signupTab.addEventListener("keydown", function(e) {
+            if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showSignup(); }
+        });
+    }
+});
 
 		function deleteVariableContact(contactId, fullName) {
             if (!confirm('Are you sure you want to delete ' + fullName + '? This is permanent and cannot be undone.')) return;
