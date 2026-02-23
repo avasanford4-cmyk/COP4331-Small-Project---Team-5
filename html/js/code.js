@@ -549,8 +549,12 @@ function validateSignup(username, password) {
             let phone = inputs[3].value;
 
             let errors = [];
-            if (!validateEmail(email)) errors.push("Invalid email address.");
-            if (!validatePhone(phone)) errors.push("Phone number must be 10 digits.");
+            if (fName.trim() === "") errors.push("First name is required.");
+            if (lName.trim() === "") errors.push("Last name is required.");
+            if (email.trim() === "") errors.push("Email is required.");
+            else if (!validateEmail(email)) errors.push("Invalid email address.");
+            if (phone.trim() === "") errors.push("Phone number is required.");
+            else if (!validatePhone(phone)) errors.push("Phone number must be 10 digits.");
             if (errors.length > 0) {
                 showToast(errors.join(" "), "error");
                 return;
@@ -630,8 +634,12 @@ function validateSignup(username, password) {
             let phone = inputs[3].value;
 
             let errors = [];
-            if (!validateEmail(email)) errors.push("Invalid email address.");
-            if (!validatePhone(phone)) errors.push("Phone number must be 10 digits.");
+            if (fName.trim() === "") errors.push("First name is required.");
+            if (lName.trim() === "") errors.push("Last name is required.");
+            if (email.trim() === "") errors.push("Email is required.");
+            else if (!validateEmail(email)) errors.push("Invalid email address.");
+            if (phone.trim() === "") errors.push("Phone number is required.");
+            else if (!validatePhone(phone)) errors.push("Phone number must be 10 digits.");
             if (errors.length > 0) {
                 showToast(errors.join(" "), "error");
                 return;
