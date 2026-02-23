@@ -326,7 +326,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const loginPassword = document.getElementById("loginPassword");
     const loginToggle = document.getElementById("loginTogglePassword");
 
-    loginToggle.addEventListener("click", () => {
+    function toggleLoginPassword() {
         if (loginPassword.type === "password") {
             loginPassword.type = "text";
             loginToggle.textContent = "🙈";
@@ -334,13 +334,17 @@ document.addEventListener("DOMContentLoaded", function () {
             loginPassword.type = "password";
             loginToggle.textContent = "👁️";
         }
+    }
+    loginToggle.addEventListener("click", toggleLoginPassword);
+    loginToggle.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleLoginPassword(); }
     });
 
     // Signup password toggle
     const signupPassword = document.getElementById("registerPassword");
     const signupToggle = document.getElementById("signupTogglePassword");
 
-    signupToggle.addEventListener("click", () => {
+    function toggleSignupPassword() {
         if (signupPassword.type === "password") {
             signupPassword.type = "text";
             signupToggle.textContent = "🙈";
@@ -348,6 +352,10 @@ document.addEventListener("DOMContentLoaded", function () {
             signupPassword.type = "password";
             signupToggle.textContent = "👁️";
         }
+    }
+    signupToggle.addEventListener("click", toggleSignupPassword);
+    signupToggle.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleSignupPassword(); }
     });
 
 });

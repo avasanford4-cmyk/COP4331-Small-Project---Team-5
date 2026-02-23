@@ -72,7 +72,8 @@ body
     transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease;
 }
 
-.buttons:hover{
+.buttons:hover,
+.buttons:focus-visible {
     transform: scale(1.08);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     outline: 2px solid #294A7E;
@@ -199,7 +200,8 @@ select{
     transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease, background-color 0.2s ease;
 }
 
-#loginToggle:hover {
+#loginToggle:hover,
+#loginToggle:focus-visible {
     background-color: #c18b6e;
     transform: scale(1.08);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
@@ -226,7 +228,8 @@ select{
     transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease;
 }
 
-.tabButton:hover {
+.tabButton:hover,
+.tabButton:focus-visible {
     transform: scale(1.08);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     outline: 2px solid #294A7E;
@@ -292,7 +295,8 @@ button {
     transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease;
 }
 
-button:hover {
+button:hover,
+button:focus-visible {
     transform: scale(1.08);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     outline: 2px solid #294A7E;
@@ -446,30 +450,10 @@ button, a, [role="button"], input[type="submit"], input[type="button"] {
   opacity: 0;
 }
 
-/* Focus styles for keyboard navigation */
+/* Focus styles for elements without a :hover equivalent */
 input[type="text"]:focus-visible,
-input[type="password"]:focus-visible {
+input[type="password"]:focus-visible,
+.password-toggle:focus-visible {
     outline: 2px solid #294A7E;
     box-shadow: 0 0 6px rgba(41, 74, 126, 0.5);
-}
-
-.buttons:focus-visible,
-button:focus-visible {
-    transform: scale(1.08);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    outline: 2px solid #294A7E;
-}
-
-.tabButton:focus-visible {
-    transform: scale(1.08);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    outline: 2px solid #294A7E;
-    color: #3B270C;
-}
-
-#loginToggle:focus-visible {
-    background-color: #c18b6e;
-    transform: scale(1.08);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    outline: 2px solid #294A7E;
 }
