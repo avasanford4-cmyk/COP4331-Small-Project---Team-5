@@ -445,3 +445,31 @@ button, a, [role="button"], input[type="submit"], input[type="button"] {
 .toast.fade-out {
   opacity: 0;
 }
+
+/* Focus styles for keyboard navigation */
+input[type="text"]:focus-visible,
+input[type="password"]:focus-visible {
+    outline: 2px solid #294A7E;
+    box-shadow: 0 0 6px rgba(41, 74, 126, 0.5);
+}
+
+.buttons:focus-visible,
+button:focus-visible {
+    transform: scale(1.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    outline: 2px solid #294A7E;
+}
+
+.tabButton:focus-visible {
+    transform: scale(1.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    outline: 2px solid #294A7E;
+    color: #3B270C;
+}
+
+#loginToggle:focus-visible {
+    background-color: #c18b6e;
+    transform: scale(1.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    outline: 2px solid #294A7E;
+}
