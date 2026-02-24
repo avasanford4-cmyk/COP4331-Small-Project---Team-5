@@ -154,7 +154,10 @@ function readCookie()
 	}
 	else
 	{
-//		document.getElementById("userName").innerHTML = "Logged in as " + firstName + " " + lastName;
+		let welcomeEl = document.getElementById("welcomeMessage");
+		if (welcomeEl) {
+			welcomeEl.innerHTML = "Welcome, " + firstName;
+		}
 	}
 }
 

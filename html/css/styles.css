@@ -52,13 +52,37 @@ body
 }
 
 
-#loggedInDiv
-{
-    font-size: 30px;
-    width: 70%;
-    margin-left: 15%;
-    padding: 25px;
-    background-color: #b2b2b2;
+#logoutButton {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 200px;
+    height: 50px;
+    font-size: 24px;
+    border-radius: 25px;
+    background-color: #dbad8a;
+    color: #fff;
+    border: none;
+    z-index: 1000;
+    font-family: 'Ubuntu', sans-serif;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease, background-color 0.2s ease;
+}
+
+#logoutButton:hover,
+#logoutButton:focus-visible {
+    background-color: #c18b6e;
+    transform: scale(1.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    outline: 2px solid #294A7E;
+}
+
+#welcomeMessage {
+    text-align: center;
+    font-family: 'Pacifico', cursive;
+    font-size: 32px;
+    color: #3B270C;
+    text-shadow: 2px 2px 8px rgba(255, 255, 255, 1);
+    margin: 0 0 20px 0;
 }
 
 #accessUIDiv
@@ -67,7 +91,10 @@ body
     width: 70%;
     margin-left: 15%;
     padding: 25px;
-    background-color: #b2b2b2;
+    background-color: rgba(217, 226, 240, 0.75);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 
 .buttons
@@ -116,6 +143,18 @@ body
     width: 28px;
     height: 28px;
     object-fit: contain;
+    transition: transform 0.15s ease;
+}
+
+.password-toggle:hover .toggle-icon,
+.password-toggle:focus-visible .toggle-icon {
+    transform: scale(1.1);
+}
+
+.password-toggle:hover,
+.password-toggle:focus-visible {
+    outline: none;
+    filter: drop-shadow(0 0 4px rgba(41, 74, 126, 0.8));
 }
 
 
@@ -169,10 +208,6 @@ input[type="text"],input[type="password"]{
     text-align: center;
 }
 
-#logoutButton{
-    width: 20%;
-    margin-left: 40%;
-}
 
 select{
     width: 30%;
@@ -466,8 +501,7 @@ button, a, [role="button"], input[type="submit"], input[type="button"] {
 
 /* Focus styles for elements without a :hover equivalent */
 input[type="text"]:focus-visible,
-input[type="password"]:focus-visible,
-.password-toggle:focus-visible {
+input[type="password"]:focus-visible {
     outline: 2px solid #294A7E;
     box-shadow: 0 0 6px rgba(41, 74, 126, 0.5);
 }
