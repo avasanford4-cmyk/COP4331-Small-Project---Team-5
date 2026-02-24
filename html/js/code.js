@@ -494,9 +494,17 @@ function validateSignup(username, password) {
                             showToast(json.error, "error");
                             return;
                         }
-
-                        let html = '<span class="success">Found ' + json.results.length + ' contact(s):</span><br>'
-                            + '<table id="contactsTable">'
+						
+						let html = "";
+						
+						if (json.results.length == 1) {
+							html += '<span class="success" id="searchSuccessMessage">Showing ' + json.results.length + ' contact:</span><br>'
+						}
+						else {
+                        html += '<span class="success" id="searchSuccessMessage">Showing ' + json.results.length + ' contacts:</span><br>'
+						}
+						html 
+                            += '<table id="contactsTable">'
                             + '<tr>'
                             + '<th style="display:none">ID</th>'
                             + '<th>First Name</th>'
