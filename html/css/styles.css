@@ -29,7 +29,18 @@ body
     color: #3B270C;
 }
 
-#loginDiv {     
+#subtitle {
+    font-size: 36px;
+    width: 80%;
+    margin: 0 5%;
+    text-align: center;
+    padding-left: 60px;
+    font-family: 'Pacifico', cursive;
+    text-shadow: 2px 2px 8px rgba(255, 255, 255, 1);
+    color: #3B270C;
+}
+
+#loginDiv {
     position: relative;           
     margin: 20px auto;
     width: 350px;                  
@@ -74,15 +85,6 @@ body
     transform: scale(1.08);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     outline: 2px solid #294A7E;
-}
-
-#welcomeMessage {
-    text-align: center;
-    font-family: 'Pacifico', cursive;
-    font-size: 32px;
-    color: #3B270C;
-    text-shadow: 2px 2px 8px rgba(255, 255, 255, 1);
-    margin: 0 0 20px 0;
 }
 
 #accessUIDiv
