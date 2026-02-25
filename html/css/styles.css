@@ -726,6 +726,8 @@ input[type="password"]:focus-visible {
     padding: 2px 4px;
     border-radius: 4px;
     border: 1px solid transparent;
+    margin-left: 0;
+    margin-bottom: 0;
 }
 
 #contactsTable td input[type="text"].morph-visible {
