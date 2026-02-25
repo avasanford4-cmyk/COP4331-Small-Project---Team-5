@@ -165,8 +165,8 @@ function doRegister()
 {
 	document.getElementById("registerResult").innerHTML = "";
 
-	let firstName = document.getElementById("registerFirstName").value;
-	let lastName = document.getElementById("registerLastName").value;
+	let regFirstName = document.getElementById("registerFirstName").value;
+	let regLastName = document.getElementById("registerLastName").value;
 	let login = document.getElementById("registerLogin").value;
 	let password = document.getElementById("registerPassword").value;
 
@@ -175,12 +175,12 @@ function doRegister()
 	document.getElementById("registerLogin").classList.remove("input-error");
 	document.getElementById("registerPassword").classList.remove("input-error");
 
-	if (firstName.trim() === "" || lastName.trim() === "" || login.trim() === "" || password.trim() === "")
+	if (regFirstName.trim() === "" || regLastName.trim() === "" || login.trim() === "" || password.trim() === "")
 	{
 		document.getElementById("registerResult").innerHTML = "Please fill in all fields";
 		// Highlight empty fields only
-    	if (firstName.trim() === "") document.getElementById("registerFirstName").classList.add("input-error");
-   		if (lastName.trim() === "") document.getElementById("registerLastName").classList.add("input-error");
+    	if (regFirstName.trim() === "") document.getElementById("registerFirstName").classList.add("input-error");
+   		if (regLastName.trim() === "") document.getElementById("registerLastName").classList.add("input-error");
     	if (login.trim() === "") document.getElementById("registerLogin").classList.add("input-error");
     	if (password.trim() === "") document.getElementById("registerPassword").classList.add("input-error");
 		return;
@@ -210,7 +210,7 @@ function doRegister()
 
 
 	var hash = md5( password );
-	let tmp = {firstName:firstName, lastName:lastName, login:login, password:hash};
+	let tmp = {firstName:regFirstName, lastName:regLastName, login:login, password:hash};
 	let jsonPayload = JSON.stringify(tmp);
 
 	let url = urlBase + '/Register.' + extension;
@@ -235,9 +235,6 @@ function doRegister()
 				}
 
 				userId = jsonObject.id;
-				window.firstName = jsonObject.firstName;
-				window.lastName = jsonObject.lastName;
-
 				firstName = jsonObject.firstName;
 				lastName = jsonObject.lastName;
 
