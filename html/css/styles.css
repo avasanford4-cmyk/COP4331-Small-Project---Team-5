@@ -107,11 +107,98 @@ body
     width: 50%;
     margin-left: 25%;
     font-family: 'Ubuntu', sans-serif;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease;
+    background-color: #D9E2F0;
+    color: #3B270C;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease, background-color 0.2s ease;
 }
 
 .buttons:hover,
 .buttons:focus-visible {
+    background-color: #c3cedf;
+    transform: scale(1.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    outline: 2px solid #294A7E;
+}
+
+/* --- Inline Row Buttons (Edit, Delete, Save, Cancel) --- */
+
+.editButton {
+    font-size: 16px;
+    font-family: 'Ubuntu', sans-serif;
+    border: none;
+    border-radius: 25px;
+    padding: 6px 14px;
+    background-color: #D9E2F0;
+    color: #3B270C;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease, background-color 0.2s ease;
+}
+
+.editButton:hover,
+.editButton:focus-visible {
+    background-color: #c3cedf;
+    transform: scale(1.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    outline: 2px solid #294A7E;
+}
+
+.deleteButton {
+    font-size: 16px;
+    font-family: 'Ubuntu', sans-serif;
+    border: none;
+    border-radius: 25px;
+    padding: 6px 14px;
+    background-color: #dbad8a;
+    color: #3B270C;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease, background-color 0.2s ease;
+}
+
+.deleteButton:hover,
+.deleteButton:focus-visible {
+    background-color: #c18b6e;
+    transform: scale(1.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    outline: 2px solid #294A7E;
+}
+
+.saveButton {
+    font-size: 16px;
+    font-family: 'Ubuntu', sans-serif;
+    border: none;
+    border-radius: 25px;
+    padding: 6px 14px;
+    background-color: #D9E2F0;
+    color: #3B270C;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease, background-color 0.2s ease;
+}
+
+.saveButton:hover,
+.saveButton:focus-visible {
+    background-color: #c3cedf;
+    transform: scale(1.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    outline: 2px solid #294A7E;
+}
+
+.cancelButton {
+    font-size: 16px;
+    font-family: 'Ubuntu', sans-serif;
+    border: none;
+    border-radius: 25px;
+    padding: 6px 14px;
+    background-color: #dbad8a;
+    color: #3B270C;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease, background-color 0.2s ease;
+}
+
+.cancelButton:hover,
+.cancelButton:focus-visible {
+    background-color: #c18b6e;
     transform: scale(1.08);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     outline: 2px solid #294A7E;

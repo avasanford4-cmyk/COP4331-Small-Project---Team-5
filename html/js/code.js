@@ -623,8 +623,8 @@ function validateSignup(username, password) {
             });
 
             // Save/Cancel buttons with fade-in animation
-            cells[5].innerHTML = '<button type="button" class="action-fade-in" onclick="saveEditContact(' + contactId + ');">Save</button> '
-                + '<button type="button" class="action-fade-in" onclick="cancelEditContact(' + contactId + ', \'' + origFirst.replace(/'/g, "\\'") + '\', \'' + origLast.replace(/'/g, "\\'") + '\', \'' + origEmail.replace(/'/g, "\\'") + '\', \'' + origPhone.replace(/'/g, "\\'") + '\');">Cancel</button>';
+            cells[5].innerHTML = '<button type="button" class="saveButton action-fade-in" onclick="saveEditContact(' + contactId + ');">Save</button> '
+                + '<button type="button" class="cancelButton action-fade-in" onclick="cancelEditContact(' + contactId + ', \'' + origFirst.replace(/'/g, "\\'") + '\', \'' + origLast.replace(/'/g, "\\'") + '\', \'' + origEmail.replace(/'/g, "\\'") + '\', \'' + origPhone.replace(/'/g, "\\'") + '\');">Cancel</button>';
 
             attachRowKeyboardNav(row,
                 function() { saveEditContact(contactId); },
@@ -737,8 +737,8 @@ function validateSignup(username, password) {
                 + '<td><input type="text" placeholder="Email"></td>'
                 + '<td><input type="text" placeholder="Phone"></td>'
                 + '<td>'
-                + '<button type="button" onclick="saveNewContact();">Save</button> '
-                + '<button type="button" onclick="cancelNewContact();">Cancel</button>'
+                + '<button type="button" class="saveButton" onclick="saveNewContact();">Save</button> '
+                + '<button type="button" class="cancelButton" onclick="cancelNewContact();">Cancel</button>'
                 + '</td>';
 
             // Row entrance animation
