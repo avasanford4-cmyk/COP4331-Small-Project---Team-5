@@ -24,8 +24,10 @@
 
 <div id="accessUIDiv">
 	<br />
-	<input type="text" id="searchText" placeholder="Search Contacts"/>
-	<button type="button" id="searchColorButton" class="buttons" onclick="modifiedSearchContact();"title="Search">&#8981; </button>
+	<div id="searchWrapper">
+		<input type="text" id="searchText" placeholder="Search Contacts"/>
+		<button type="button" id="searchColorButton" class="buttons" onclick="modifiedSearchContact();"title="Search">&#8981; </button>
+	</div>
 	<button type="button" id="addContactButton" class="buttons" onclick="addContactRow();"> Add Contact </button><br />
 	<span id="contactSearchResult"></span>
 	<p id="colorList">

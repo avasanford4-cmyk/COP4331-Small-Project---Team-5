@@ -101,36 +101,38 @@ body
 }
 
 
+
+#searchWrapper {
+    display: flex;             
+    flex-direction: row; 
+    align-items: stretch; 
+    width: 100%;  
+    max-width: 100%;
+    gap: 10px; 
+}
+
 #searchText {
-    width: 80%;                 /* roughly 90% of container width */
+    flex: 1; 
     height: 50px;
-    border-radius: 25px;        /* fully rounded */
-    padding: 0 20px;
     font-size: 30px;
-    display: inline-block;      /* allows button next to it */
-    vertical-align: middle;     /* aligns with button */
     box-sizing: border-box;
+    padding-left: 20px;
+    margin: 0; 
+    padding: 0 10px;
 }
 
 #searchColorButton {
     display: flex; 
-    font-size: 40px; /* increase this number to make the symbol bigger */
-    width: 60px;                /* roughly 10% width */
-    height: 50px;
-    border-radius: 25%;         /* fully rounded circle */
-    line-height: 5px;
-    top: -2px;
-    justify-content: center; /* horizontal center */
-    align-items: center;     /* vertical center */
-    display: inline-block;
-    vertical-align: middle;     /* aligns with input */
+    flex-shrink: 0; 
+    width: 60px;                
+    height: 50px; 
+    margin: 0; 
+    justify-content: center; 
+    align-items: center; 
+    border-radius: 15px;
     background-color: #D9E2F0;
-    color: #3B270C;
-    border: none;
-    margin-bottom: 110px; 
-    margin-left: 10px;          /* small gap between input and button */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
@@ -246,10 +248,7 @@ body
 {
 	font-size: 30px;
 }
-#searchText
-{
-	font-size: 30px;
-}
+
 #colorText
 {
 	font-size: 30px;
