@@ -612,6 +612,100 @@ input[type="password"]:focus-visible {
     background-color: rgba(255, 255, 255, 0.85);
 }
 
+/* --- Delete Confirmation Modal --- */
+
+.delete-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(59, 39, 12, 0.7);
+  z-index: 10000;
+  justify-content: center;
+  align-items: center;
+}
+
+.delete-overlay.active {
+  display: flex;
+}
+
+.delete-modal {
+  background-color: rgba(217, 226, 240, 0.95);
+  backdrop-filter: blur(8px);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  padding: 30px 40px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  font-family: 'Ubuntu', sans-serif;
+  color: #3B270C;
+  animation: modal-enter 220ms var(--ease-out) both;
+}
+
+.delete-modal p {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+
+.delete-warning {
+  font-size: 15px !important;
+  color: #805326;
+  margin-bottom: 24px !important;
+}
+
+.delete-modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.delete-modal-btn {
+  font-size: 18px;
+  font-family: 'Ubuntu', sans-serif;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 28px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease, background-color 0.2s ease;
+}
+
+.delete-modal-btn:hover,
+.delete-modal-btn:focus-visible {
+  transform: scale(1.08);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  outline: 2px solid #294A7E;
+}
+
+.delete-cancel-btn {
+  background-color: #dbad8a;
+  color: #3B270C;
+}
+
+.delete-cancel-btn:hover,
+.delete-cancel-btn:focus-visible {
+  background-color: #c18b6e;
+}
+
+.delete-confirm-btn {
+  background-color: #c0392b;
+  color: #fff;
+}
+
+.delete-confirm-btn:hover,
+.delete-confirm-btn:focus-visible {
+  background-color: #a93226;
+}
+
+.key-hint {
+  font-size: 11px;
+  opacity: 0.6;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
 /* --- Reduced Motion --- */
 
 @media (prefers-reduced-motion: reduce) {

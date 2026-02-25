@@ -887,8 +887,26 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
+		var pendingDeleteId = null;
+
 		function deleteVariableContact(contactId, fullName) {
-            if (!confirm('Are you sure you want to delete ' + fullName + '? This is permanent and cannot be undone.')) return;
+            pendingDeleteId = contactId;
+            var overlay = document.getElementById("deleteOverlay");
+            document.getElementById("deleteContactName").textContent = fullName;
+            overlay.classList.add("active");
+            document.getElementById("deleteConfirmBtn").focus();
+        }
+
+        function closeDeleteModal() {
+            var overlay = document.getElementById("deleteOverlay");
+            overlay.classList.remove("active");
+            pendingDeleteId = null;
+        }
+
+        function confirmDelete() {
+            if (pendingDeleteId === null) return;
+            var contactId = pendingDeleteId;
+            closeDeleteModal();
 
             let payload = JSON.stringify({id: contactId, userId: userId});
             let url = urlBase + '/DeleteContact.' + extension;
@@ -903,7 +921,6 @@ document.addEventListener("DOMContentLoaded", function() {
                         if (json.error && json.error.length > 0) {
                             showToast(json.error, "error");
                         } else {
-                            // Remove the row immediately so it never lingers
                             var deletedRow = document.getElementById("contact-row-" + contactId);
                             if (deletedRow) deletedRow.remove();
 
@@ -917,3 +934,28 @@ document.addEventListener("DOMContentLoaded", function() {
                 showToast(err.message, "error");
             }
         }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var overlay = document.getElementById("deleteOverlay");
+            var cancelBtn = document.getElementById("deleteCancelBtn");
+            var confirmBtn = document.getElementById("deleteConfirmBtn");
+
+            if (cancelBtn) cancelBtn.addEventListener("click", closeDeleteModal);
+            if (confirmBtn) confirmBtn.addEventListener("click", confirmDelete);
+
+            if (overlay) {
+                overlay.addEventListener("click", function(e) {
+                    if (e.target === overlay) closeDeleteModal();
+                });
+
+                overlay.addEventListener("keydown", function(e) {
+                    if (e.key === "Escape") {
+                        e.preventDefault();
+                        closeDeleteModal();
+                    } else if (e.key === "Delete" || e.key === "Enter") {
+                        e.preventDefault();
+                        confirmDelete();
+                    }
+                });
+            }
+        });

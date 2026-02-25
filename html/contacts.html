@@ -35,5 +35,16 @@
 
 <div id="toast" class="toast" aria-live="polite"></div>
 
+<div id="deleteOverlay" class="delete-overlay" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+	<div class="delete-modal">
+		<p id="deleteModalTitle">Are you sure you want to delete <strong id="deleteContactName"></strong>?</p>
+		<p class="delete-warning">This is permanent and cannot be undone.</p>
+		<div class="delete-modal-buttons">
+			<button type="button" id="deleteCancelBtn" class="delete-modal-btn delete-cancel-btn">Cancel <span class="key-hint">ESC</span></button>
+			<button type="button" id="deleteConfirmBtn" class="delete-modal-btn delete-confirm-btn">Delete <span class="key-hint">DEL</span></button>
+		</div>
+	</div>
+</div>
+
 </body>
 </html>
