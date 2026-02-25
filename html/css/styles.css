@@ -100,6 +100,40 @@ body
     box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 
+
+#searchText {
+    width: 80%;                 /* roughly 90% of container width */
+    height: 50px;
+    border-radius: 25px;        /* fully rounded */
+    padding: 0 20px;
+    font-size: 30px;
+    display: inline-block;      /* allows button next to it */
+    vertical-align: middle;     /* aligns with button */
+    box-sizing: border-box;
+}
+
+#searchColorButton {
+    display: flex; 
+    font-size: 40px; /* increase this number to make the symbol bigger */
+    width: 60px;                /* roughly 10% width */
+    height: 50px;
+    border-radius: 25%;         /* fully rounded circle */
+    line-height: 5px;
+    top: -2px;
+    justify-content: center; /* horizontal center */
+    align-items: center;     /* vertical center */
+    display: inline-block;
+    vertical-align: middle;     /* aligns with input */
+    background-color: #D9E2F0;
+    color: #3B270C;
+    border: none;
+    margin-bottom: 110px; 
+    margin-left: 10px;          /* small gap between input and button */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
 .buttons
 {
     font-size: 30px;
@@ -363,7 +397,7 @@ select{
     font-family: 'Ubuntu', sans-serif;
     cursor: pointer;
     padding: 10px 20px;
-    color: #805326;
+    color: #3B270C;
     transition: transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease;
 }
 
